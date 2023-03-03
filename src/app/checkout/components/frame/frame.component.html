@@ -1,0 +1,20 @@
+ 
+ 
+  <form id="payment-form" method="POST" action="https://merchant.com/charge-card">
+    <div class="one-liner">
+      <div class="card-frame">
+      </div>
+      <button  id="pay-button" [disabled]="disablePayButton || !outerFormValid" (click) = "submit($event)">
+        PAY NOW
+      </button>
+    </div>
+    <p class="error-message"></p>
+    <p class="success-payment-message"></p> 
+  </form>
+ 
+ 
+ 
+ 
+ 
+
+

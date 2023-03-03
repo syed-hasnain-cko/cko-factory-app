@@ -1,0 +1,51 @@
+ 
+<div id="myModal" *ngIf="path == 'success'">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box-success">
+                    <i class="material-icons">&#xE876;</i>
+                </div>              
+                <h4 class="modal-title">Payment Successful!</h4>    
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Payment successfully processed.</p>
+                <p class="text-center">Thank you!.</p>
+            </div>
+ 
+            <div *ngIf="this.error">
+                <p class="text-center">However, we could not get your payment ID. Please contact customer support.</p>
+            </div>
+            <div *ngIf="!this.error">
+                <p class="text-center">Your payment ID: <strong>{{data.id}}</strong></p>
+                <p class="text-center">Your amount: <strong>{{data.amount}}</strong></p>
+                <p class="text-center">Your currency: <strong>{{data.currency}}</strong></p>
+            </div>
+            <div class="text-center">
+                <button type="button" routerLink="/" class="btn btn-primary">Okay</button>
+              </div>
+        </div>
+    </div>
+</div>  
+ 
+<div id="myModal" *ngIf="path == 'failure'">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box-failure">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>              
+                <h4 class="modal-title">Payment Error!</h4> 
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Your transaction has failed. Please go back and try again.</p>
+            </div>
+            <div class="text-center">
+                <button type="button" routerLink="/" class="btn btn-danger">Try Again</button>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+                           
+

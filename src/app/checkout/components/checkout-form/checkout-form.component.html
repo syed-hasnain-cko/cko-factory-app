@@ -1,0 +1,29 @@
+<br>
+<div class="flex-container">
+  <div class ="row">
+    <h3>User Details:</h3>
+  </div>
+  <form [formGroup]="checkoutdetails">
+ 
+ 
+    <div class ="row">
+       <div class="col-10">      
+            <input type="text" class="input-box" id="name" placeholder="name" formControlName="name">
+       </div>
+       <div></div>
+    </div>   
+    <div class ="row">
+        <div class="col-10">
+            <input type="email" class="input-box" id="email" placeholder="email@example.com" formControlName="email">
+          </div>
+    </div>
+  </form>    
+    <div class ="row">
+        <div class="col-10"> 
+          <app-frame (tokenized)="onTokenized($event)" [outerFormValid]="this.checkoutdetails.valid"></app-frame>
+        </div>
+    </div>
+    
+</div>
+ 
+
