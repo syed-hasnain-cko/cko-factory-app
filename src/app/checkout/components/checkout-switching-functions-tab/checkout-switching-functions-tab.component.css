@@ -1,0 +1,9 @@
+.tab-close {
+    color: gray;
+    text-align: right;
+    cursor: pointer;
+  }
+  a{
+    text-decoration: none;
+    font-size: 13px;
+  }

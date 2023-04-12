@@ -13,8 +13,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
  
 export class CheckoutFormComponent implements OnInit {
  
- 
- 
   checkoutdetails = new FormGroup({
     name: new FormControl('',[Validators.required, Validators.minLength(3), Validators.pattern('[a-zA-Z ]*')]),
     email: new FormControl('',[Validators.required, Validators.minLength(3), Validators.email]),
@@ -29,23 +27,29 @@ export class CheckoutFormComponent implements OnInit {
   
   }
  
- 
- 
- 
   onTokenized(event :any){
  
-    let body = {
-      token:event,
-      success_url:"http://localhost:4200/success",
-      failure_url:"http://localhost:4200/failure",
+    var body = {
+      "source":{
+        "type":"token",
+        "token":event
+      },
+      "amount":265*100,
+      "currency":"EUR",
+      "3ds":{
+        "enabled":true
+      },
+      "processing_channel_id":"pc_oxr4t4p3nseejeqdjqk3pdlpm4",
+      "success_url":"http://localhost:4200/success",
+      "failure_url":"http://localhost:4200/failure",
     }
  
     this.checkoutService.postDetails(body).subscribe((data:any)=>{
-      this.goToUrl(data.redirection_url);
+      console.log(data);
+      this.goToUrl(data._links.redirect.href);
     });
  
   }
- 
  
   goToUrl(url:any): void {
     this.document.location.href = url;

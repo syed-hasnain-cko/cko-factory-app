@@ -1,0 +1,47 @@
+<br>
+<div class="flex-container">
+  <div class ="row">
+ 
+  </div>
+  <div class="container">
+    <div class="alert alert-success" *ngIf="this.sandboxConfiguration.valid">
+        Please save the changes. The keys are verified.
+  </div>
+  <div class="alert alert-danger" *ngIf="this.sandboxConfiguration.invalid">
+    Please enter the correct format of keys. Invalid {{this.invalidControls}} is in incorrect format.
+</div>
+  <form [formGroup]="sandboxConfiguration">
+ 
+ 
+    <div class ="row">
+       <div class="col-10">      
+            <input type="text" class="input-box" id="publicKey" placeholder="Public Key (pk_sbox_xxxxx)" formControlName="publicKey" (change)="findInvalidControls()">
+       </div>
+       <div></div>
+    </div>   
+    <div class ="row">
+        <div class="col-10">
+            <input type="text" class="input-box" id="secretKey" placeholder="Secret Key (sk_sbox_xxxxx)" formControlName="secretKey" (change)="findInvalidControls()">
+          </div>
+    </div>
+    <div class ="row">
+        <div class="col-10">
+            <input type="text" class="input-box" id="processingChannelId" placeholder="Processing Channel Id (pc_xxxxx)" formControlName="processingChannelId" (change)="findInvalidControls()">
+          </div>
+    </div>
+    <div class ="row">
+        <div class="col-10">
+            <input type="text" class="input-box" id="currencyAccountId" placeholder="Currency Account Id (ca_xxxxx)" formControlName="currencyAccountId" (change)="findInvalidControls()">
+          </div>
+    </div>
+ 
+    <div class ="row">
+        <div class="col-10"> 
+          <input type="button" class="input-button btn-primary" id="saveConfiguration" formControlName="saveConfiguration" value="Save Configuration" (click)="saveConfiguration()" [disabled]="this.sandboxConfiguration.invalid">
+        </div>
+    </div>
+</form>   
+    
+</div>
+ 
+

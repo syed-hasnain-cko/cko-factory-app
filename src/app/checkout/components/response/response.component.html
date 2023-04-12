@@ -14,12 +14,12 @@
             </div>
  
             <div *ngIf="this.error">
-                <p class="text-center">However, we could not get your payment ID. Please contact customer support.</p>
+                <p class="text-center">However, we could not get your payment ID. Please contact your implementation engineer.</p>
             </div>
             <div *ngIf="!this.error">
-                <p class="text-center">Your payment ID: <strong>{{data.id}}</strong></p>
-                <p class="text-center">Your amount: <strong>{{data.amount}}</strong></p>
-                <p class="text-center">Your currency: <strong>{{data.currency}}</strong></p>
+                <p class="text-center">Transaction ID: <strong>{{data.id}}</strong></p>
+                <p class="text-center">Amount: <strong>{{data.amount/100}}</strong></p>
+                <p class="text-center">Currency: <strong>{{data.currency}}</strong></p>
             </div>
             <div class="text-center">
                 <button type="button" routerLink="/" class="btn btn-primary">Okay</button>
@@ -35,10 +35,11 @@
                 <div class="icon-box-failure">
                     <i class="material-icons">&#xE5CD;</i>
                 </div>              
-                <h4 class="modal-title">Payment Error!</h4> 
+                <h4 class="modal-title">Error processing the payment!</h4> 
             </div>
             <div class="modal-body">
                 <p class="text-center">Your transaction has failed. Please go back and try again.</p>
+                <pre>{{errorResponse | json}}</pre>
             </div>
             <div class="text-center">
                 <button type="button" routerLink="/" class="btn btn-danger">Try Again</button>

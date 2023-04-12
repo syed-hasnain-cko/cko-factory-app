@@ -11,6 +11,7 @@ import { CheckoutService } from '../../services/checkout.service';
 export class ResponseComponent implements OnInit {
   
   error: boolean = false;
+  errorResponse : any;
   data: any ;
   path : string | undefined ;
   sessionId : string = "";
@@ -24,14 +25,14 @@ export class ResponseComponent implements OnInit {
       this.route.queryParams
       .subscribe(params => {
         this.sessionId = params['cko-session-id'];
-        this.checkoutService.getDetails(this.sessionId).subscribe((data:any)=>{
+        this.checkoutService.getDetails(this.sessionId).subscribe({next:(data:any)=>{
           console.log(data)
           this.data = data;
         },
-        (error:any)=>{
-          console.log(error)
+        error:(error:any)=>{
+          this.errorResponse = error
           this.error = true;
-        })
+        }})
  
       }
     );

@@ -20,23 +20,21 @@ export class FrameComponent implements OnInit {
  
   ngOnInit(): void {
  
- 
     const script = this.renderer.createElement('script');
     script.src = ""
     this.renderer.appendChild(document.head, script);
     Frames.init(
       {
-        publicKey:"pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a",
-        style: frameStyle
+        publicKey:"pk_sbox_7za2ppcb4pw7zzdkfzutahfjl4t",
+        style: frameStyle,
+        schemeChoice: true
   });
     Frames.addEventHandler(
       Frames.Events.CARD_VALIDATION_CHANGED,
        (event:any) => {
         console.log("CARD_VALIDATION_CHANGED: %o", event);
- 
         this.togglePayButton(!Frames.isCardValid());
        this.cd.detectChanges();
-  
       }
     );
  
