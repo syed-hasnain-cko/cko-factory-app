@@ -4,12 +4,7 @@
  
   </div>
   <div class="container">
-    <div class="alert alert-success" *ngIf="this.sandboxConfiguration.valid">
-        Please save the changes. The keys are verified.
-  </div>
-  <div class="alert alert-danger" *ngIf="this.sandboxConfiguration.invalid">
-    Please enter the correct format of keys. Invalid {{this.invalidControls}} is in incorrect format.
-</div>
+    <alert></alert>
   <form [formGroup]="sandboxConfiguration">
  
  

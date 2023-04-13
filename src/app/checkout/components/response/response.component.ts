@@ -30,6 +30,7 @@ export class ResponseComponent implements OnInit {
           this.data = data;
         },
         error:(error:any)=>{
+          //console.log(error)
           this.errorResponse = error
           this.error = true;
         }})
