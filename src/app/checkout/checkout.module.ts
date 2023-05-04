@@ -10,7 +10,13 @@ import { FrameComponent } from './components/frame/frame.component';
 import { CheckoutRoutingModule } from './checkout-routing.module';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CheckoutProductFunctionTabsComponent } from './components/checkout-product-function-tabs/checkout-product-function-tabs.component';
+import { CheckoutSingleFunctionTabComponent } from './components/checkout-single-function-tab/checkout-single-function-tab.component';
+import { CheckoutSwitchingFunctionsTabComponent } from './components/checkout-switching-functions-tab/checkout-switching-functions-tab.component';
+import { CheckoutSandboxConfigurationComponent } from './components/checkout-sandbox-configuration/checkout-sandbox-configuration.component';
+import { AlertModule } from '../_alert';
+import { SofortSourceComponent } from './components/sofort-source/sofort-source.component';
 
 
 
@@ -22,13 +28,20 @@ import { ReactiveFormsModule } from '@angular/forms';
     ResponseComponent,
     CheckoutPageComponent,
     FrameComponent,
+    CheckoutProductFunctionTabsComponent,
+    CheckoutSingleFunctionTabComponent,
+    CheckoutSwitchingFunctionsTabComponent,
+    CheckoutSandboxConfigurationComponent,
+    SofortSourceComponent,
   ],
   imports: [
     HttpClientModule,
     CheckoutRoutingModule,
     CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AlertModule,
+    FormsModule
   ],
   providers: [],
 })

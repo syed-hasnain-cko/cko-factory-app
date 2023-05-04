@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  gateway: "checkoutltd",
+  gatewayMerchantID: "pk_sbox_7za2ppcb4pw7zzdkfzutahfjl4t",
+  baseAPIUrl:"https://api.sandbox.checkout.com",
+  publicKey:"pk_sbox_7za2ppcb4pw7zzdkfzutahfjl4t", //NAS
+  secretKey: "sk_sbox_dqmcmja373yetcnwkrwi6x6biyv", //NAS
+  currencyAccountId:"ca_bit44sueegdejo6fye55n262se",
+  processingChannelId:"pc_oxr4t4p3nseejeqdjqk3pdlpm4"
 };
 
 /*

@@ -1,4 +1,7 @@
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 
 
@@ -14,7 +17,10 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [],
-  imports: [RouterModule.forRoot(appRoutes)],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    RouterModule.forRoot(appRoutes, {useHash:false})],
   exports: []
 })
 export class AppRoutingModule { }
