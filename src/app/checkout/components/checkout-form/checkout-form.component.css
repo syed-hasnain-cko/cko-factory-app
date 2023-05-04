@@ -10,3 +10,31 @@
     box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
   }
 
+  #pay-button {
+    width: 175px;
+    margin-left: 8px;
+  }
+  #pay-button {
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: 500;
+    height: 40px;
+    width: 50%;
+    background-color: #13395e;
+    box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.4);
+  }
+  #pay-button:active {
+    background-color: #0b2a49;
+    box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.4);
+  }
+  
+  #pay-button:hover {
+    background-color: #15406b;
+    box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.4);
+  }
+  
+  #pay-button:disabled {
+    background-color: #697887;
+    box-shadow: none;
+  }

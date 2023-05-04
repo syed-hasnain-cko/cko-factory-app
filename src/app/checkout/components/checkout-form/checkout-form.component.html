@@ -1,28 +1,166 @@
 <br>
 <div class="flex-container">
+  <alert id="alert-http-failure"></alert>
   <div class ="row">
-    <h3>User Details:</h3>
+    <h3>Consumer Details:</h3>
+    <br>
+  
   </div>
   <form [formGroup]="checkoutdetails">
  
- 
     <div class ="row">
-       <div class="col-10">      
+      <div class="col-2">      
+        <label>Name:</label>  
+    </div>
+       <div class="col-8">      
             <input type="text" class="input-box" id="name" placeholder="name" formControlName="name">
        </div>
        <div></div>
-    </div>   
+    </div>  
     <div class ="row">
-        <div class="col-10">
-            <input type="email" class="input-box" id="email" placeholder="email@example.com" formControlName="email">
-          </div>
+      <div class="col-2">      
+        <label>Email:</label>  
     </div>
+      <div class="col-8">
+          <input type="email" class="input-box" id="email" placeholder="email@example.com" formControlName="email">
+        </div>
+  </div> 
+  <div class ="row">
+    <div class="col-2">      
+      <label>Shipping Address:</label>  
+  </div>
+    <div class="col-8">
+        <input type="text" class="input-box" id="address" placeholder="Full Address" formControlName="address">
+      </div>
+</div> 
+<div class ="row">
+  <div class="col-2">      
+    <label>Zip Code:</label>  
+</div>
+  <div class="col-8">
+      <input type="text" class="input-box" id="zip" placeholder="Zip Code" formControlName="zip">
+    </div>
+</div> 
+<div class ="row">
+  <div class="col-1">      
+    <label>City:</label>  
+</div>
+  <div class="col-4">
+      <input type="text" class="input-box" id="city" placeholder="City" formControlName="city">
+    </div>
+    <div class="col-1">      
+      <label>Country:</label>  
+  </div>
+    <div class="col-4">
+      <select class="input-box" id="country" formControlName="country">
+        <option *ngFor="let count of Countries" [value]="count">{{count}}</option>
+      </select>
+    </div>
+</div> 
+  <div class ="row">
+    <h3>Payment Details:</h3>
+    <br>
+  
+  </div>
+  <div class ="row"> 
+    <div class="col-2"> 
+      <label>Amount:</label>  
+    </div>
+  <div class="col-8">      
+       <input type="text" class="input-box" id="amount" placeholder="amount" formControlName="amount">
+  </div>
+  <div></div>
+</div>
+<div class ="row">
+<div class="col-2">      
+  <label>Currency:</label>  
+</div>
+<div class="col-8">    
+  <select class="input-box" id="currency" formControlName="currency">
+    <option *ngFor="let curr of Currencies" [value]="curr">{{curr}}</option>
+  </select>
+</div>
+<div></div>
+</div>
+  <div class ="row"> 
+    <div class="col-2"> 
+      <label>Payment Method:</label>  
+    </div>
+  <div class="col-8">      
+    <select class="input-box" id="paymentMethod" formControlName="paymentMethod" (change)="disableNonActivePaymentMethodFields($event)">
+      <option *ngFor="let apm of PaymentMethods" [value]="apm">{{apm}}</option>
+    </select>
+  </div>
+  <div></div>
+</div>
+<div class ="row" *ngIf="showGiropay"> 
+  <div class="col-2"> 
+    <label>Description:</label>  
+  </div>
+<div class="col-8">      
+     <input type="text" class="input-box" id="description" placeholder="Description for the order" formControlName="description">
+</div>
+<div></div>
+</div>
+<div class ="row">
+  <div class="col-10"> 
+    <app-sofort-source *ngIf="showSofort" [sofort]="checkoutdetails.controls.sofortForm"></app-sofort-source>
+  </div>
+</div>
+
+ <div class ="row" *ngIf="this.showAuthorizationType">
+  <div class="col-2">      
+    <label>Authorization:</label>  
+</div>
+  <div class="col-8">    
+    <select class="input-box" id="authorizationType" formControlName="authorizationType">
+      <option *ngFor="let authtype of AuthorizationType" [value]="authtype">{{authtype}}</option>
+    </select>
+  </div>
+  <div></div>
+</div>
+<div class ="row" *ngIf="this.showCapture">
+  
+  <div class="col-2">      
+    <label>Capture:</label>  
+</div>
+  <div class="col-8">      
+       <input type="checkbox" id="capture" placeholder="Capture" formControlName="capture">
+  </div>
+  <div></div>
+</div>
+ <div class ="row" *ngIf="this.show3ds">
+  
+  <div class="col-2">      
+    <label>3DS Enabled:</label>  
+</div>
+  <div class="col-8">      
+       <input type="checkbox" id="threeDS" placeholder="3ds Enabled" formControlName="threeDS">
+  </div>
+  <div></div>
+</div>
+
   </form>    
+
+
+
     <div class ="row">
         <div class="col-10"> 
-          <app-frame (tokenized)="onTokenized($event)" [outerFormValid]="this.checkoutdetails.valid"></app-frame>
+          <app-frame *ngIf="showFrames" (tokenized)="onTokenized($event)" [outerFormValid]="this.checkoutdetails.valid"></app-frame>
         </div>
     </div>
+    <br>
+    <div class ="row" *ngIf = "!this.showFrames">
+      <div class="col-10"> 
+        <button  id="pay-button" [disabled]="this.checkoutdetails.invalid" (click) = "submitPayment()">
+          PAY NOW
+        </button>
+        {{this.checkoutdetails.value | json}}
+      </div>
+      <div>      
+        {{this.checkoutdetails.value | json}}
+      </div>
+  </div>
     
 </div>
  

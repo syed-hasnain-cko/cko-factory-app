@@ -13,7 +13,8 @@ export class CheckoutSandboxConfigurationComponent  {
 
   options = {
     autoClose: true,
-    keepAfterRouteChange: false
+    keepAfterRouteChange: false,
+    id: "alert-save-success"
 };
 
   constructor(protected alertService : AlertService){
