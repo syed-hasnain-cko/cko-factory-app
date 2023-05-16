@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { IPaymentMethod } from '../interfaces/payment-method-interface';
+import { PAYMENT_METHODS } from '../data-store';
  
  
 @Injectable({
@@ -34,6 +36,8 @@ export class CheckoutService {
     return this.http.get<any>(url, httpOptions);
   }
 }
+
+
  
  
 

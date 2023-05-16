@@ -76,7 +76,7 @@
   <label>Currency:</label>  
 </div>
 <div class="col-8">    
-  <select class="input-box" id="currency" formControlName="currency">
+  <select class="input-box" id="currency" formControlName="currency" (change)="apmToCountryCurrencyMappingValidator()">
     <option *ngFor="let curr of Currencies" [value]="curr">{{curr}}</option>
   </select>
 </div>
@@ -152,7 +152,7 @@
     <br>
     <div class ="row" *ngIf = "!this.showFrames">
       <div class="col-10"> 
-        <button  id="pay-button" [disabled]="this.checkoutdetails.invalid" (click) = "submitPayment()">
+        <button  id="pay-button" [disabled]="this.checkoutdetails.invalid || this.apmInvalid" (click) = "submitPayment()">
           PAY NOW
         </button>
         {{this.checkoutdetails.value | json}}

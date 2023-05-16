@@ -6,14 +6,20 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AlertService } from 'src/app/_alert';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { IPaymentMethod } from '../../interfaces/payment-method-interface';
+import { CURRENCIES, PAYMENT_METHODS } from '../../data-store';
  
- 
+const reduceToUniques = (value: any, index: any, self: string | any[]) => {
+  return self.indexOf(value) === index;
+};
+
+
 @Component({
   selector: 'app-checkout-form',
   templateUrl: './checkout-form.component.html',
   styleUrls: ['./checkout-form.component.css']
 })
- 
+
 export class CheckoutFormComponent implements OnInit {
 
   showFrames = true;
@@ -27,17 +33,23 @@ export class CheckoutFormComponent implements OnInit {
   showAuthorizationType = true;
   showCapture = true;
   show3ds = true;
+  apmInvalid = false;
 
-  Currencies: any = ['EUR', 'USD', 'GBP']
-  Countries: any = ['DE', 'US', 'UK']
+  Currencies = CURRENCIES.map(currency => currency.iso4217)
+  Countries = PAYMENT_METHODS.map(paymentMethod => paymentMethod.restrictedCurrencyCountryPairings).filter(pairing => pairing != null)
+  .map(pairing => 
+    Object.values(pairing)
+  ).flat(3).filter(reduceToUniques).sort();
+  
+    
   AuthorizationType: any = ['Final','Estimated']
-  PaymentMethods: any = ['Frames','sofort','giropay','eps','p24','bancontact','ideal','multibanco', 'trustly', 'tamara', 'knet','fawry','benefit']
+  PaymentMethods = PAYMENT_METHODS.map(apms => apms.type)
  
   checkoutdetails = new FormGroup({
     name: new FormControl('',[Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     email: new FormControl('',[Validators.required, Validators.minLength(6), Validators.email]),
     amount: new FormControl('', [Validators.required,Validators.max(50000)]),
-    paymentMethod: new FormControl('Frames',[Validators.required]),
+    paymentMethod: new FormControl('frames',[Validators.required]),
     currency: new FormControl('EUR',[Validators.required]),
     threeDS: new FormControl(true,[Validators.required]),
     capture: new FormControl(true),
@@ -60,7 +72,7 @@ export class CheckoutFormComponent implements OnInit {
   constructor(private checkoutService:CheckoutService,@Inject(DOCUMENT) private document: Document, protected alertService:AlertService, private router: Router) { }
  
   ngOnInit(): void {
-  
+ console.log(this.Countries)
   }
 
   options = {
@@ -68,6 +80,7 @@ export class CheckoutFormComponent implements OnInit {
     keepAfterRouteChange: false,
     id: "alert-http-failure"
 };
+
 
 disableCardPaymentsFields(){
   this.showAuthorizationType = false;
@@ -85,6 +98,8 @@ disableNonActivePaymentMethodFields(apm:any){
   this.showMultibanco = false;
   this.showEPS = false;
   this.showP24 = false;
+
+  this.apmToCountryCurrencyMappingValidator();
 
   switch(apm.target.value){
     case 'sofort':{
@@ -121,7 +136,7 @@ break;
       this.disableCardPaymentsFields();
 break;
     }
-    case 'Frames':{
+    case 'frames':{
       this.showFrames = true;
       this.showAuthorizationType = true;
       this.showCapture = true;
@@ -176,14 +191,12 @@ break;
         "udf1":"Payment-From-Factory-App",
       }
     }
-
-    console.log(body)
  
     this.checkoutService.postDetails(body).subscribe((data:any)=>{
       if(data.status == "Pending")
       this.goToUrl(data._links.redirect.href);
       else{
-        this.router.navigateByUrl('/success',{state:data.id});
+        this.router.navigateByUrl('/success');
       }
     },
       (error) =>{
@@ -200,7 +213,6 @@ break;
 
   createSourceObject(){
     let sourceObject = ``;
-    console.log(this.checkoutdetails.controls['paymentMethod'].value)
   
     switch(this.checkoutdetails.controls['paymentMethod'].value){
       case 'sofort':{
@@ -222,7 +234,6 @@ break;
       }
          
     }
-    console.log(sourceObject)
     return sourceObject;
   }
 
@@ -261,7 +272,7 @@ break;
       if(data.status == "Pending")
       this.goToUrl(data._links.redirect.href);
       else{
-        this.router.navigateByUrl('/success/',{state:data.id});
+        this.router.navigateByUrl('/success');
       }
     },
       (error) =>{
@@ -271,8 +282,38 @@ break;
     );
   
   }
+
+
+   apmToCountryCurrencyMappingValidator() {
+    let currency = this.checkoutdetails.controls['currency'].value;
+    let country = this.checkoutdetails.controls['country'].value;
+    let apm = this.checkoutdetails.controls['paymentMethod'].value;
+
+    let paymentMethod = PAYMENT_METHODS.find(apms => apms.type == apm);
+    if(paymentMethod != undefined){
+      if(paymentMethod.restrictedCurrencyCountryPairings == null){
+        return;
+    }
+    }
+        if(paymentMethod != null && currency !== null && country !== null){
+          console.log(paymentMethod.restrictedCurrencyCountryPairings)
+          if(paymentMethod.restrictedCurrencyCountryPairings != null){
+            if(paymentMethod.restrictedCurrencyCountryPairings[currency] != undefined){
+            if ((paymentMethod.restrictedCurrencyCountryPairings[currency] as string[]).includes(country)){
+              this.apmInvalid = false;
+              return;
+            }
+          }
+          }
+        }
+        this.alertService.warn(`${apm} is not available for ${country} to be processed in ${currency}`,this.options)
+        this.apmInvalid = true;
+  }
+
+  }
+  
  
-}
+
   
  
  
