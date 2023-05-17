@@ -62,8 +62,19 @@ export class CheckoutFormComponent implements OnInit {
       languageCode: new FormControl('EN',[Validators.required, Validators.maxLength(2)]),
       countryCode: new FormControl('DE',[Validators.required, Validators.maxLength(2)])
     }),
-    description: new FormControl('Test Giropay Payment',[Validators.required, Validators.maxLength(100)])
-
+    idealForm:  new FormGroup({
+      description: new FormControl('Test Ideal Payment',[Validators.required, Validators.maxLength(35)]),
+      bic: new FormControl('INGBNL2A',[Validators.required, Validators.maxLength(11)]),
+      language: new FormControl('',[Validators.maxLength(2)])
+    }),
+    p24Form:  new FormGroup({
+      paymentCountry: new FormControl('PL',[Validators.required, Validators.maxLength(2)]),
+      accountHolderName: new FormControl('John Smith',[Validators.required, Validators.minLength(3),Validators.maxLength(100)]),
+      accountHolderEmail: new FormControl('john.smith@example.com',[Validators.required,Validators.maxLength(254),Validators.email]),
+      billingDescriptor: new FormControl('P24 Test Payment',[Validators.maxLength(65534)])
+    }),
+    description: new FormControl('Test Giropay Payment',[Validators.required, Validators.maxLength(100)]),
+    purpose: new FormControl('Test EPS Payment',[Validators.required, Validators.maxLength(27)])
   });
   
   token:string ="";
@@ -72,7 +83,7 @@ export class CheckoutFormComponent implements OnInit {
   constructor(private checkoutService:CheckoutService,@Inject(DOCUMENT) private document: Document, protected alertService:AlertService, private router: Router) { }
  
   ngOnInit(): void {
- console.log(this.Countries)
+
   }
 
   options = {
@@ -195,6 +206,9 @@ break;
     this.checkoutService.postDetails(body).subscribe((data:any)=>{
       if(data.status == "Pending")
       this.goToUrl(data._links.redirect.href);
+      else if(data.status == "Declined"){
+        this.alertService.error(`The payment is declined with response message: ${data.response_summary}-${data.response_code} `,this.options)
+      }
       else{
         this.router.navigateByUrl('/success');
       }
@@ -231,7 +245,40 @@ break;
         {
         "type": "${this.checkoutdetails.controls['paymentMethod'].value}"
      }`; 
+     break;
       }
+      case 'ideal':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls['paymentMethod'].value}",
+        "bic": "${this.checkoutdetails.controls['idealForm'].controls['bic'].value}",
+        "description":"${this.checkoutdetails.controls['idealForm'].controls['description'].value}",
+        "language":"${this.checkoutdetails.controls['idealForm'].controls['language'].value}"
+     }`;
+     break;
+      }
+      case 'eps':{
+        sourceObject =      
+        `
+        {
+        "type": "${this.checkoutdetails.controls['paymentMethod'].value}",
+        "purpose": "${this.checkoutdetails.controls.purpose}"
+     }`;  
+        break;
+       }
+       case 'p24':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "payment_country": "${this.checkoutdetails.controls.p24Form.controls.paymentCountry.value}",
+        "account_holder_name":"${this.checkoutdetails.controls.p24Form.controls.accountHolderName.value}",
+        "account_holder_email":"${this.checkoutdetails.controls.p24Form.controls.accountHolderEmail.value}",
+        "billing_descriptor":"${this.checkoutdetails.controls.p24Form.controls.billingDescriptor.value}"
+     }`;
+       }
+       break;
          
     }
     return sourceObject;
@@ -271,6 +318,9 @@ break;
     this.checkoutService.postDetails(paymentRequestBody).subscribe((data:any)=>{
       if(data.status == "Pending")
       this.goToUrl(data._links.redirect.href);
+      else if(data.status == "Declined"){
+        this.alertService.error(`The payment is declined with response message: ${data.response_summary}-${data.response_code} `,this.options)
+      }
       else{
         this.router.navigateByUrl('/success');
       }

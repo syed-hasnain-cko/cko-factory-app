@@ -52,7 +52,7 @@
       <label>Country:</label>  
   </div>
     <div class="col-4">
-      <select class="input-box" id="country" formControlName="country">
+      <select class="input-box" id="country" formControlName="country" (change)="apmToCountryCurrencyMappingValidator()">
         <option *ngFor="let count of Countries" [value]="count">{{count}}</option>
       </select>
     </div>
@@ -102,9 +102,28 @@
 </div>
 <div></div>
 </div>
+<div class ="row" *ngIf="showEPS"> 
+  <div class="col-2"> 
+    <label>Purpose:</label>  
+  </div>
+<div class="col-8">      
+     <input type="text" class="input-box" id="purpose" placeholder="Purpose for the payment" formControlName="purpose">
+</div>
+<div></div>
+</div>
 <div class ="row">
   <div class="col-10"> 
     <app-sofort-source *ngIf="showSofort" [sofort]="checkoutdetails.controls.sofortForm"></app-sofort-source>
+  </div>
+</div>
+<div class ="row">
+  <div class="col-10"> 
+    <app-ideal-source *ngIf="showIdeal" [ideal]="checkoutdetails.controls.idealForm"></app-ideal-source>
+  </div>
+</div>
+<div class ="row">
+  <div class="col-10"> 
+    <app-p24-source *ngIf="showP24" [p24]="checkoutdetails.controls.p24Form"></app-p24-source>
   </div>
 </div>
 
@@ -155,10 +174,8 @@
         <button  id="pay-button" [disabled]="this.checkoutdetails.invalid || this.apmInvalid" (click) = "submitPayment()">
           PAY NOW
         </button>
-        {{this.checkoutdetails.value | json}}
       </div>
       <div>      
-        {{this.checkoutdetails.value | json}}
       </div>
   </div>
     
