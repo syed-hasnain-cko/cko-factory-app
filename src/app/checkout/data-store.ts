@@ -108,14 +108,6 @@ export const CURRENCIES: ICurrency[] = [
       restrictedCurrencyCountryPairings: null
     },
     {
-      name: 'POLi',
-      type: 'poli',
-      restrictedCurrencyCountryPairings: {
-        'AUD': ['AU'],
-        'NZD': ['NZ']
-      }
-    },
-    {
       name: 'Przelewy24',
       type: 'p24',
       restrictedCurrencyCountryPairings: {
@@ -143,5 +135,12 @@ export const CURRENCIES: ICurrency[] = [
       restrictedCurrencyCountryPairings: {
         'EUR': ['AT', 'BE', 'DE', 'ES', 'IT', 'NL']
       }
-    }
+    },
+    {
+        name: 'Trustly',
+        type: 'trustly',
+        restrictedCurrencyCountryPairings: {
+          'EUR': ['AT', 'LV', 'DE', 'ES', 'UK', 'NL', 'CZ', 'DK','EE','FI','LT','NO','SE']
+        }
+      }
   ]

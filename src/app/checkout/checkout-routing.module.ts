@@ -10,7 +10,7 @@ import { ResponseComponent } from './components/response/response.component';
 
 const checkoutRoutes: Routes = [
   { path: '', component:CheckoutProductFunctionTabsComponent},
-  { path: 'success/:cko-session-id', component:ResponseComponent},
+  { path: 'success', component:ResponseComponent},
   { path: 'failure', component:ResponseComponent},
 ];
 

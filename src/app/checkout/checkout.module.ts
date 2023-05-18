@@ -17,6 +17,8 @@ import { CheckoutSwitchingFunctionsTabComponent } from './components/checkout-sw
 import { CheckoutSandboxConfigurationComponent } from './components/checkout-sandbox-configuration/checkout-sandbox-configuration.component';
 import { AlertModule } from '../_alert';
 import { SofortSourceComponent } from './components/sofort-source/sofort-source.component';
+import { IdealSourceComponent } from './components/ideal-source/ideal-source.component';
+import { P24SourceComponent } from './components/p24-source/p24-source.component';
 
 
 
@@ -33,6 +35,8 @@ import { SofortSourceComponent } from './components/sofort-source/sofort-source.
     CheckoutSwitchingFunctionsTabComponent,
     CheckoutSandboxConfigurationComponent,
     SofortSourceComponent,
+    IdealSourceComponent,
+    P24SourceComponent,
   ],
   imports: [
     HttpClientModule,
