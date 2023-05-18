@@ -30,6 +30,15 @@ export class CheckoutFormComponent implements OnInit {
   showMultibanco = false;
   showEPS = false;
   showP24 = false;
+  showBenefitPay = false;
+  showFawry = false;
+  showTrustly = false;
+  showKnet = false;
+  showGooglePay = false;
+  showQpay = false;
+  showSepa = false;
+  showKlarna = false;
+  showPaypal = false;
   showAuthorizationType = true;
   showCapture = true;
   show3ds = true;
@@ -46,8 +55,10 @@ export class CheckoutFormComponent implements OnInit {
   PaymentMethods = PAYMENT_METHODS.map(apms => apms.type)
  
   checkoutdetails = new FormGroup({
-    name: new FormControl('',[Validators.required, Validators.pattern('[a-zA-Z ]*')]),
-    email: new FormControl('',[Validators.required, Validators.minLength(6), Validators.email]),
+    name: new FormControl('Syed Hasnain',[Validators.required, Validators.pattern('[a-zA-Z ]*')]),
+    email: new FormControl('smhasnain1996@gmail.com',[Validators.required, Validators.minLength(6), Validators.email]),
+    countryCode: new FormControl('+33',[Validators.required,Validators.maxLength(7),Validators.minLength(1)]),
+    number: new FormControl('1234567890',[Validators.required,Validators.maxLength(25),Validators.minLength(6)]),
     amount: new FormControl('', [Validators.required,Validators.max(50000)]),
     paymentMethod: new FormControl('frames',[Validators.required]),
     currency: new FormControl('EUR',[Validators.required]),
@@ -135,6 +146,7 @@ break;
     }
     case 'multibanco':{
       this.showMultibanco = true;
+      this.disableCardPaymentsFields();
 break;
     }
     case 'bancontact':{
@@ -144,6 +156,11 @@ break;
     }
     case 'p24':{
       this.showP24 = true;
+      this.disableCardPaymentsFields();
+break;
+    }
+    case 'trustly':{
+      this.showTrustly = true;
       this.disableCardPaymentsFields();
 break;
     }
@@ -168,13 +185,19 @@ break;
 //For Frames payment only
  
   onTokenized(event :any){
+
+    let selectedCurrency = CURRENCIES.filter(currency => currency.iso4217 == this.checkoutdetails.controls.currency.value).find(base => base.base);
+    let finalAmount;
+    if(selectedCurrency != undefined && this.checkoutdetails.controls['amount'].value != null){
+      finalAmount = parseFloat(this.checkoutdetails.controls['amount'].value) * selectedCurrency?.base
+    }
  
     var body = {
       "source":{
         "type":"token",
         "token":event
       },
-      "amount":this.checkoutdetails.controls['amount'].value,
+      "amount": finalAmount,
       "currency":this.checkoutdetails.controls['currency'].value,
       "3ds":{
         "enabled":this.checkoutdetails.controls['threeDS'].value
@@ -186,7 +209,11 @@ break;
       "failure_url":"http://localhost:4200/failure",
       "customer":{
         "name":this.checkoutdetails.controls['name'].value,
-        "email":this.checkoutdetails.controls['email'].value
+        "email":this.checkoutdetails.controls['email'].value,
+        "phone":{
+          "country_code":this.checkoutdetails.controls.countryCode.value,
+          "number":this.checkoutdetails.controls.number.value
+        }
       },
       "description": this.checkoutdetails.controls['description'].value,
       "reference": "Order-"+ Math.floor(Math.random() * 1000) + 1,
@@ -279,6 +306,20 @@ break;
      }`;
        }
        break;
+       case 'trustly':{
+        sourceObject =      
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "billing_address":{
+          "address_line1":"${this.checkoutdetails.controls.address.value}",
+          "city":"${this.checkoutdetails.controls.city.value}",
+          "country":"${this.checkoutdetails.controls.country.value}",
+          "zip":"${this.checkoutdetails.controls.zip.value}"
+        }
+     }`; 
+     break;
+      }
          
     }
     return sourceObject;
@@ -287,18 +328,28 @@ break;
   //for APM payments only
   submitPayment(){
 
+    let selectedCurrency = CURRENCIES.filter(currency => currency.iso4217 == this.checkoutdetails.controls.currency.value).find(base => base.base);
+    let finalAmount;
+    if(selectedCurrency != undefined && this.checkoutdetails.controls['amount'].value != null){
+      finalAmount = parseFloat(this.checkoutdetails.controls['amount'].value) * selectedCurrency?.base
+    }
+
     let source = this.createSourceObject();
 
     let paymentRequestBody = {
       "source":JSON.parse(source),
-      "amount":this.checkoutdetails.controls['amount'].value,
+      "amount":finalAmount,
       "currency":this.checkoutdetails.controls['currency'].value,
       "processing_channel_id":localStorage.getItem('processingChannelId') !== null ? localStorage.getItem('processingChannelId') : environment.processingChannelId,
       "success_url":"http://localhost:4200/success",
       "failure_url":"http://localhost:4200/failure",
       "customer":{
         "name":this.checkoutdetails.controls['name'].value,
-        "email":this.checkoutdetails.controls['email'].value
+        "email":this.checkoutdetails.controls['email'].value,
+        "phone":{
+          "country_code":this.checkoutdetails.controls.countryCode.value,
+          "number":this.checkoutdetails.controls.number.value
+        }
       },
       "description": this.checkoutdetails.controls['description'].value,
       "reference": "Order-"+ Math.floor(Math.random() * 1000) + 1,
