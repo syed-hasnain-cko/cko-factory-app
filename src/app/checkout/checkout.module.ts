@@ -19,6 +19,8 @@ import { AlertModule } from '../_alert';
 import { SofortSourceComponent } from './components/sofort-source/sofort-source.component';
 import { IdealSourceComponent } from './components/ideal-source/ideal-source.component';
 import { P24SourceComponent } from './components/p24-source/p24-source.component';
+import { BancontactSourceComponent } from './components/bancontact-source/bancontact-source.component';
+import { KnetSourceComponent } from './components/knet-source/knet-source.component';
 
 
 
@@ -37,6 +39,8 @@ import { P24SourceComponent } from './components/p24-source/p24-source.component
     SofortSourceComponent,
     IdealSourceComponent,
     P24SourceComponent,
+    BancontactSourceComponent,
+    KnetSourceComponent,
   ],
   imports: [
     HttpClientModule,

@@ -17,6 +17,7 @@ export class FrameComponent implements OnInit {
   @Output() tokenized : EventEmitter<any> = new EventEmitter();
  
   constructor(private renderer: Renderer2,private cd: ChangeDetectorRef) { }
+
  
   ngOnInit(): void {
  
@@ -38,9 +39,6 @@ export class FrameComponent implements OnInit {
       }
     );
  
- 
- 
- 
     Frames.addEventHandler(
       Frames.Events.CARD_TOKENIZED,
       (event:any) => {
@@ -50,6 +48,7 @@ export class FrameComponent implements OnInit {
       }
     );
   }
+
   togglePayButton(cardValid: boolean) {
     
     this.disablePayButton = cardValid;
@@ -68,9 +67,7 @@ export class FrameComponent implements OnInit {
  
   isPayButtonActive(){
     return this.disablePayButton;
-  }
- 
- 
+  } 
  
 }
  

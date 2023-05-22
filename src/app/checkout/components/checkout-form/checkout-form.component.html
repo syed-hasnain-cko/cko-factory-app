@@ -137,6 +137,16 @@
     <app-p24-source *ngIf="showP24" [p24]="checkoutdetails.controls.p24Form"></app-p24-source>
   </div>
 </div>
+<div class ="row">
+  <div class="col-10"> 
+    <app-bancontact-source *ngIf="showBancontact" [bancontact]="checkoutdetails.controls.bancontactForm"></app-bancontact-source>
+  </div>
+</div>
+<div class ="row">
+  <div class="col-10"> 
+    <app-knet-source *ngIf="showKnet" [knet]="checkoutdetails.controls.knetForm"></app-knet-source>
+  </div>
+</div>
 
  <div class ="row" *ngIf="this.showAuthorizationType">
   <div class="col-2">      

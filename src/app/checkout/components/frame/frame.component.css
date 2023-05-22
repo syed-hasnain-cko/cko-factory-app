@@ -11,6 +11,27 @@ html {
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
+.icon-container.payment-method {
+  right: 0;
+}
+
+.icon-container.payment-method {
+  transform: translateY(-50%) rotateY(90deg);
+  transition: opacity 0.15s ease-out;
+  opacity: 0;
+  top: 50%;
+}
+
+.icon-container.payment-method.show {
+  opacity: 1;
+  transition: all 0.4s ease-out;
+  transform: translateY(-50%) rotateY(0deg);
+}
+
+.icon-container.payment-method img {
+  width: 100%;
+}
+
 #payment-form {
   margin: 0 auto;
 }
@@ -64,8 +85,27 @@ iframe {
   box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
 }
 
+#cc-fields {
+  border: solid 1px #13395e;
+  border-radius: 3px;
+  width: 100%;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  height: 40px;
+  box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
+  flex: 1 1 auto;
+  padding-left: 10px;
+}
+
 
 .card-frame.frame--rendered {
+  opacity: 1; /* Prevents iFrame rendering issue */
+
+  /* Reminder: consider removal of 'rendered' */
+  /* event passing to Merchant page */
+}
+
+#cc-fields.frame--rendered {
   opacity: 1; /* Prevents iFrame rendering issue */
 
   /* Reminder: consider removal of 'rendered' */
@@ -77,7 +117,17 @@ iframe {
   box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.15);
 }
 
+#cc-fields.frame--rendered.frame--focus {
+  border: solid 1px #13395e;
+  box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.15);
+}
+
 .card-frame.frame--rendered.frame--invalid {
+  border: solid 1px #d96830;
+  box-shadow: 0 2px 5px 0 rgba(217, 104, 48, 0.15);
+}
+
+#cc-fields.frame--rendered.frame--invalid {
   border: solid 1px #d96830;
   box-shadow: 0 2px 5px 0 rgba(217, 104, 48, 0.15);
 }
@@ -109,8 +159,13 @@ iframe {
     margin-bottom: 0;
   }
 
+ #cc-fields {
+    width: 100%;
+    margin-bottom: 2;
+  }
+
   #pay-button {
     width: 175px;
-    margin-left: 8px;
+    margin-left: 0px;
   }
 }

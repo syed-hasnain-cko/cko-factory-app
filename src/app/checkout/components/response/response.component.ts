@@ -18,11 +18,12 @@ export class ResponseComponent implements OnInit {
   constructor(private route: ActivatedRoute, private checkoutService:CheckoutService) { }
  
   ngOnInit() {
-    console.log(this.route)
-    this.path = this.route.snapshot.routeConfig?.path=='success/:cko-session-id'?'success':undefined;
  
+    this.path = this.path = this.route.snapshot.routeConfig?.path;
+    console.log(this.path)
     if(this.path =='success'){
-      this.sessionId = this.route.snapshot.params['cko-session-id']
+      console.log(this.route)
+      this.sessionId = this.route.snapshot.queryParams['cko-session-id']
         
         this.checkoutService.getDetails(this.sessionId).subscribe({next:(data:any)=>{
           console.log(data)
@@ -32,7 +33,6 @@ export class ResponseComponent implements OnInit {
           this.errorResponse = error
           this.error = true;
         }
-      //})
  
       }
     );

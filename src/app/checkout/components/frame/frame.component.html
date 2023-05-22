@@ -1,13 +1,30 @@
  
  
   <form id="payment-form" method="POST" action="https://merchant.com/charge-card">
-    <div class="one-liner">
+    <!-- <div class="one-liner">
       <div class="card-frame">
       </div>
       <button  id="pay-button" [disabled]="disablePayButton || !outerFormValid" (click) = "submit($event)">
         PAY NOW
       </button>
+    </div> -->
+<div class = "multi-liner">
+
+
+    <div class="card-number-frame" id="cc-fields">
+     
     </div>
+    <div class="expiry-date-frame" id="cc-fields">
+
+    </div>
+    <div class="cvv-frame" id="cc-fields">
+ 
+    </div>
+    <button  id="pay-button" [disabled]="disablePayButton || !outerFormValid" (click) = "submit($event)">
+      PAY NOW
+    </button>
+  </div>
+
     <p class="error-message"></p>
     <p class="success-payment-message"></p> 
   </form>

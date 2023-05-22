@@ -5,7 +5,7 @@ import { CheckoutService } from '../../services/checkout.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/_alert';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { IPaymentMethod } from '../../interfaces/payment-method-interface';
 import { CURRENCIES, PAYMENT_METHODS } from '../../data-store';
  
@@ -76,7 +76,7 @@ export class CheckoutFormComponent implements OnInit {
     idealForm:  new FormGroup({
       description: new FormControl('Test Ideal Payment',[Validators.required, Validators.maxLength(35)]),
       bic: new FormControl('INGBNL2A',[Validators.required, Validators.maxLength(11)]),
-      language: new FormControl('',[Validators.maxLength(2)])
+      language: new FormControl('en',[Validators.maxLength(2)])
     }),
     p24Form:  new FormGroup({
       paymentCountry: new FormControl('PL',[Validators.required, Validators.maxLength(2)]),
@@ -84,8 +84,24 @@ export class CheckoutFormComponent implements OnInit {
       accountHolderEmail: new FormControl('john.smith@example.com',[Validators.required,Validators.maxLength(254),Validators.email]),
       billingDescriptor: new FormControl('P24 Test Payment',[Validators.maxLength(65534)])
     }),
-    description: new FormControl('Test Giropay Payment',[Validators.required, Validators.maxLength(100)]),
-    purpose: new FormControl('Test EPS Payment',[Validators.required, Validators.maxLength(27)])
+    bancontactForm:  new FormGroup({
+      paymentCountry: new FormControl('BE',[Validators.required, Validators.maxLength(2)]),
+      accountHolderName: new FormControl('John Smith',[Validators.required, Validators.minLength(3),Validators.maxLength(100)]),
+      language: new FormControl('en',[Validators.maxLength(2)]),
+      billingDescriptor: new FormControl('Bancontact Test Payment',[Validators.maxLength(65534)])
+    }),
+    knetForm:  new FormGroup({
+      cardToken: new FormControl('',[Validators.maxLength(8)]),
+      ptlf: new FormControl('',[Validators.maxLength(45)]),
+      language: new FormControl('en',[Validators.required,Validators.maxLength(2)]),
+      userDefinedField1: new FormControl('',[Validators.maxLength(255)]),
+      userDefinedField2: new FormControl('',[Validators.maxLength(255)]),
+      userDefinedField3: new FormControl('',[Validators.maxLength(255)]),
+      userDefinedField4: new FormControl('',[Validators.maxLength(255)]),
+      userDefinedField5: new FormControl('',[Validators.maxLength(255)])
+    }),
+    description: new FormControl('Test Payment',[Validators.required, Validators.maxLength(100)]),
+    purpose: new FormControl('Test Payment',[Validators.required, Validators.maxLength(27)])
   });
   
   token:string ="";
@@ -121,47 +137,66 @@ disableNonActivePaymentMethodFields(apm:any){
   this.showEPS = false;
   this.showP24 = false;
 
-  this.apmToCountryCurrencyMappingValidator();
-
   switch(apm.target.value){
     case 'sofort':{
       this.showSofort = true;
       this.disableCardPaymentsFields();
-break;
+      break;
     }
     case 'giropay':{
       this.showGiropay = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('DE');
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     case 'ideal':{
       this.showIdeal = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('NL');
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     case 'eps':{
       this.showEPS = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('AT');
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     case 'multibanco':{
       this.showMultibanco = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('PT');
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     case 'bancontact':{
       this.showBancontact = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('BE');
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     case 'p24':{
       this.showP24 = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('PL');
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     case 'trustly':{
       this.showTrustly = true;
       this.disableCardPaymentsFields();
+      this.apmToCountryCurrencyMappingValidator();
+break;
+    }
+    case 'knet':{
+      this.showKnet = true;
+      this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('KW');
+      this.checkoutdetails.controls.currency.setValue('KWD');
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     case 'frames':{
@@ -169,6 +204,7 @@ break;
       this.showAuthorizationType = true;
       this.showCapture = true;
       this.show3ds = true;
+      this.apmToCountryCurrencyMappingValidator();
 break;
     }
     default:{
@@ -176,6 +212,7 @@ break;
       this.showAuthorizationType = true;
       this.showCapture = true;
       this.show3ds = true;
+      this.apmToCountryCurrencyMappingValidator();
     }
 
   }
@@ -304,8 +341,9 @@ break;
         "account_holder_email":"${this.checkoutdetails.controls.p24Form.controls.accountHolderEmail.value}",
         "billing_descriptor":"${this.checkoutdetails.controls.p24Form.controls.billingDescriptor.value}"
      }`;
+     break;
        }
-       break;
+       
        case 'trustly':{
         sourceObject =      
         `
@@ -320,6 +358,35 @@ break;
      }`; 
      break;
       }
+
+      case 'bancontact':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "payment_country": "${this.checkoutdetails.controls.bancontactForm.controls.paymentCountry.value}",
+        "account_holder_name":"${this.checkoutdetails.controls.bancontactForm.controls.accountHolderName.value}",
+        "billing_descriptor":"${this.checkoutdetails.controls.bancontactForm.controls.billingDescriptor.value}",
+        "language":"${this.checkoutdetails.controls.bancontactForm.controls.language.value}"
+     }`;
+     break;
+       }
+       case 'knet':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "language": "${this.checkoutdetails.controls.knetForm.controls.language.value}",
+        "user_defined_field1":"${this.checkoutdetails.controls.knetForm.controls.userDefinedField1.value}",
+        "user_defined_field2":"${this.checkoutdetails.controls.knetForm.controls.userDefinedField2.value}",
+        "user_defined_field3":"${this.checkoutdetails.controls.knetForm.controls.userDefinedField3.value}",
+        "user_defined_field4":"${this.checkoutdetails.controls.knetForm.controls.userDefinedField4.value}",
+        "user_defined_field5":"${this.checkoutdetails.controls.knetForm.controls.userDefinedField5.value}",
+        "card_token":"${this.checkoutdetails.controls.knetForm.controls.cardToken.value}",
+        "ptlf":"${this.checkoutdetails.controls.knetForm.controls.ptlf.value}"
+     }`;
+     break;
+       }
          
     }
     return sourceObject;
@@ -373,7 +440,17 @@ break;
         this.alertService.error(`The payment is declined with response message: ${data.response_summary}-${data.response_code} `,this.options)
       }
       else{
-        this.router.navigateByUrl('/success');
+        
+        let queryParams = {
+            'cko-session-id' : data.id 
+        }
+        console.log(queryParams)
+        const navigationExtras: NavigationExtras = {
+          queryParams: queryParams,
+          queryParamsHandling: 'merge',
+          skipLocationChange:false
+        };
+        this.router.navigate(['/success'], navigationExtras);
       }
     },
       (error) =>{
@@ -397,7 +474,6 @@ break;
     }
     }
         if(paymentMethod != null && currency !== null && country !== null){
-          console.log(paymentMethod.restrictedCurrencyCountryPairings)
           if(paymentMethod.restrictedCurrencyCountryPairings != null){
             if(paymentMethod.restrictedCurrencyCountryPairings[currency] != undefined){
             if ((paymentMethod.restrictedCurrencyCountryPairings[currency] as string[]).includes(country)){
