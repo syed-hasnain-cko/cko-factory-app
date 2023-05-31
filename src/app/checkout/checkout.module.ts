@@ -21,6 +21,7 @@ import { IdealSourceComponent } from './components/ideal-source/ideal-source.com
 import { P24SourceComponent } from './components/p24-source/p24-source.component';
 import { BancontactSourceComponent } from './components/bancontact-source/bancontact-source.component';
 import { KnetSourceComponent } from './components/knet-source/knet-source.component';
+import { QpaySourceComponent } from './components/qpay-source/qpay-source.component';
 
 
 
@@ -41,6 +42,7 @@ import { KnetSourceComponent } from './components/knet-source/knet-source.compon
     P24SourceComponent,
     BancontactSourceComponent,
     KnetSourceComponent,
+    QpaySourceComponent,
   ],
   imports: [
     HttpClientModule,

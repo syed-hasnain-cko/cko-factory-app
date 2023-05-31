@@ -100,6 +100,12 @@ export class CheckoutFormComponent implements OnInit {
       userDefinedField4: new FormControl('',[Validators.maxLength(255)]),
       userDefinedField5: new FormControl('',[Validators.maxLength(255)])
     }),
+    qpayForm:  new FormGroup({
+      description: new FormControl('Test Qpay Payment',[Validators.required, Validators.maxLength(255)]),
+      nationalId: new FormControl('070AYY010BU234M',[Validators.maxLength(32)]),
+      language: new FormControl('En',[Validators.maxLength(2)]),
+      quantity: new FormControl(2,[Validators.min(1)])
+    }),
     description: new FormControl('Test Payment',[Validators.required, Validators.maxLength(100)]),
     purpose: new FormControl('Test Payment',[Validators.required, Validators.maxLength(27)])
   });
@@ -196,6 +202,22 @@ break;
       this.disableCardPaymentsFields();
       this.checkoutdetails.controls.country.setValue('KW');
       this.checkoutdetails.controls.currency.setValue('KWD');
+      this.apmToCountryCurrencyMappingValidator();
+break;
+    }
+    case 'qpay':{
+      this.showQpay = true;
+      this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('QA');
+      this.checkoutdetails.controls.currency.setValue('QAR');
+      this.apmToCountryCurrencyMappingValidator();
+break;
+    }
+    case 'benefit':{
+      this.showBenefitPay = true;
+      this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('BH');
+      this.checkoutdetails.controls.currency.setValue('BHD');
       this.apmToCountryCurrencyMappingValidator();
 break;
     }
@@ -327,7 +349,7 @@ break;
         `
         {
         "type": "${this.checkoutdetails.controls['paymentMethod'].value}",
-        "purpose": "${this.checkoutdetails.controls.purpose}"
+        "purpose": "${this.checkoutdetails.controls.purpose.value}"
      }`;  
         break;
        }
@@ -387,6 +409,26 @@ break;
      }`;
      break;
        }
+       case 'qpay':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "quantity": "${this.checkoutdetails.controls.qpayForm.controls.quantity.value}",
+        "description":"${this.checkoutdetails.controls.qpayForm.controls.description.value}",
+        "language":"${this.checkoutdetails.controls.qpayForm.controls.language.value}",
+        "national_id":"${this.checkoutdetails.controls.qpayForm.controls.nationalId.value}"
+     }`;
+     break;
+      }
+      case 'benefit':{
+        sourceObject =      
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}"
+     }`; 
+     break;
+      }
          
     }
     return sourceObject;
@@ -419,7 +461,7 @@ break;
         }
       },
       "description": this.checkoutdetails.controls['description'].value,
-      "reference": "Order-"+ Math.floor(Math.random() * 1000) + 1,
+     "reference": "Order"+ Math.floor(Math.random() * 1000) + 1,
       "shipping":{
         "address":{
           "address_line1": this.checkoutdetails.controls['address'].value,

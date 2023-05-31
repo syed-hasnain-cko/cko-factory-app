@@ -39,7 +39,7 @@ export const CURRENCIES: ICurrency[] = [
     },
     {
       name: 'BenefitPay',
-      type: 'benefitpay',
+      type: 'benefit',
       restrictedCurrencyCountryPairings: {
         'BHD': ['BH']
       }
