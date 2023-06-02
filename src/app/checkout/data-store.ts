@@ -11,6 +11,7 @@ export const PAYPAL_PLANS= [
 ]
 
 export const CURRENCIES: ICurrency[] = [
+  { iso4217: 'AED', base: 100 },
     { iso4217: 'ARS', base: 100 },
     { iso4217: 'AUD', base: 100 },
     { iso4217: 'BHD', base: 1000 },
@@ -30,7 +31,8 @@ export const CURRENCIES: ICurrency[] = [
     { iso4217: 'QAR', base: 100 },
     { iso4217: 'SEK', base: 100 },
     { iso4217: 'SGD', base: 100 },
-    { iso4217: 'USD', base: 100 }
+    { iso4217: 'SAR', base: 100 },
+    { iso4217: 'USD', base: 100 },
   ];
 
   export const PAYMENT_METHODS: IPaymentMethod[] = [
@@ -73,11 +75,6 @@ export const CURRENCIES: ICurrency[] = [
       restrictedCurrencyCountryPairings: {
         'EUR': ['DE']
       }
-    },
-    {
-      name: 'Google Pay',
-      type: 'googlepay',
-      restrictedCurrencyCountryPairings: null
     },
     {
       name: 'iDEAL',
@@ -150,6 +147,17 @@ export const CURRENCIES: ICurrency[] = [
         type: 'trustly',
         restrictedCurrencyCountryPairings: {
           'EUR': ['AT', 'LV', 'DE', 'ES', 'UK', 'NL', 'CZ', 'DK','EE','FI','LT','NO','SE']
+        }
+      },
+      {
+        name: 'Tamara',
+        type: 'tamara',
+        restrictedCurrencyCountryPairings: {
+          'BHD': ['BH'],
+          'AED': ['AE'],
+          'KWD':['KW'],
+          'QAR':['QA'],
+          'SAR':['SA']
         }
       }
   ]

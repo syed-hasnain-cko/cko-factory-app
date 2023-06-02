@@ -33,6 +33,7 @@ export class CheckoutFormComponent implements OnInit {
   showBenefitPay = false;
   showFawry = false;
   showTrustly = false;
+  showTamara = false;
   showKnet = false;
   showGooglePay = false;
   showQpay = false;
@@ -58,8 +59,8 @@ export class CheckoutFormComponent implements OnInit {
   checkoutdetails = new FormGroup({
     name: new FormControl('Syed Hasnain',[Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     email: new FormControl('smhasnain1996@gmail.com',[Validators.required, Validators.minLength(6), Validators.email]),
-    countryCode: new FormControl('+33',[Validators.required,Validators.maxLength(7),Validators.minLength(1)]),
-    number: new FormControl('1234567890',[Validators.required,Validators.maxLength(25),Validators.minLength(6)]),
+    countryCode: new FormControl('+966',[Validators.required,Validators.maxLength(7),Validators.minLength(1)]),
+    number: new FormControl('523456789',[Validators.required,Validators.maxLength(25),Validators.minLength(6)]),
     amount: new FormControl('', [Validators.required,Validators.max(50000)]),
     paymentMethod: new FormControl('frames',[Validators.required]),
     currency: new FormControl('EUR',[Validators.required]),
@@ -108,6 +109,11 @@ export class CheckoutFormComponent implements OnInit {
       quantity: new FormControl(2,[Validators.min(1)])
     }),
     multibancoForm:  new FormGroup({
+      paymentCountry: new FormControl('PT',[Validators.required, Validators.maxLength(2)]),
+      accountHolderName: new FormControl('John Smith',[Validators.required, Validators.minLength(3),Validators.maxLength(100)]),
+      billingDescriptor: new FormControl('Multibanco Test Payment',[Validators.maxLength(65534)])
+    }),
+    tamaraForm: new FormGroup({
       paymentCountry: new FormControl('PT',[Validators.required, Validators.maxLength(2)]),
       accountHolderName: new FormControl('John Smith',[Validators.required, Validators.minLength(3),Validators.maxLength(100)]),
       billingDescriptor: new FormControl('Multibanco Test Payment',[Validators.maxLength(65534)])
@@ -164,6 +170,7 @@ disableNonActivePaymentMethodFields(apm:any){
     case 'giropay':{
       this.showGiropay = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.currency.setValue('EUR');
       this.checkoutdetails.controls.country.setValue('DE');
       this.apmToCountryCurrencyMappingValidator();
 break;
@@ -171,6 +178,7 @@ break;
     case 'ideal':{
       this.showIdeal = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.currency.setValue('EUR');
       this.checkoutdetails.controls.country.setValue('NL');
       this.apmToCountryCurrencyMappingValidator();
 break;
@@ -178,6 +186,7 @@ break;
     case 'eps':{
       this.showEPS = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.currency.setValue('EUR');
       this.checkoutdetails.controls.country.setValue('AT');
       this.apmToCountryCurrencyMappingValidator();
 break;
@@ -185,6 +194,7 @@ break;
     case 'multibanco':{
       this.showMultibanco = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.currency.setValue('EUR');
       this.checkoutdetails.controls.country.setValue('PT');
       this.apmToCountryCurrencyMappingValidator();
 break;
@@ -237,6 +247,35 @@ break;
       this.showPaypal = true;
       this.disableCardPaymentsFields();
       this.apmToCountryCurrencyMappingValidator();
+break;
+    }
+    case 'tamara':{
+      this.showTamara = true;
+      this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('SA');
+      this.checkoutdetails.controls.currency.setValue('SAR');
+      this.apmToCountryCurrencyMappingValidator();
+break;
+    }
+    case 'klarna':{
+      this.showKlarna = true;
+      this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('DE');
+      this.checkoutdetails.controls.currency.setValue('EUR');
+      this.apmToCountryCurrencyMappingValidator();
+      this.apmInvalid = true;
+      this.alertService.info('Klarna is not yet available on NAS, Coming Soon!',this.options)
+break;
+    }
+    case 'sepa':{
+      this.apmInvalid = true;
+      this.showSepa = true;
+      this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('DE');
+      this.checkoutdetails.controls.currency.setValue('EUR');
+      this.apmToCountryCurrencyMappingValidator();
+      this.apmInvalid = true;
+      this.alertService.info('SEPA is not yet available on NAS, Coming Soon!',this.options)
 break;
     }
     case 'frames':{
@@ -465,6 +504,21 @@ break;
         "payment_country": "${this.checkoutdetails.controls.multibancoForm.controls.paymentCountry.value}",
         "account_holder_name":"${this.checkoutdetails.controls.multibancoForm.controls.accountHolderName.value}",
         "billing_descriptor":"${this.checkoutdetails.controls.multibancoForm.controls.billingDescriptor.value}"
+     }`;
+     break;
+       }
+
+       case 'tamara':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "billing_address":{
+          "address_line1":"${this.checkoutdetails.controls.address.value}",
+          "city":"${this.checkoutdetails.controls.city.value}",
+          "country":"${this.checkoutdetails.controls.country.value}",
+          "zip":"${this.checkoutdetails.controls.zip.value}"
+        }
      }`;
      break;
        }
