@@ -68,9 +68,9 @@ export class CheckoutFormComponent implements OnInit {
     capture: new FormControl(true),
     authorizationType: new FormControl('Final',[Validators.required]),
     country: new FormControl('DE',[Validators.required]),
-    city: new FormControl('Schonefeld',[Validators.required]),
+    city: new FormControl('Gotham',[Validators.required]),
     zip: new FormControl('12529',[Validators.required]),
-    address: new FormControl('Angerstrasse 23',[Validators.required]),
+    address: new FormControl('XYZ Street',[Validators.required]),
     sofortForm:  new FormGroup({
       languageCode: new FormControl('EN',[Validators.required, Validators.maxLength(2)]),
       countryCode: new FormControl('DE',[Validators.required, Validators.maxLength(2)])
@@ -165,6 +165,9 @@ disableNonActivePaymentMethodFields(apm:any){
     case 'sofort':{
       this.showSofort = true;
       this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.currency.setValue('EUR');
+      this.checkoutdetails.controls.country.setValue('DE');
+      this.apmToCountryCurrencyMappingValidator();
       break;
     }
     case 'giropay':{
@@ -353,7 +356,15 @@ break;
         this.alertService.error(`The payment is declined with response message: ${data.response_summary}-${data.response_code} `,this.options)
       }
       else{
-        this.router.navigateByUrl('/success');
+        let queryParams = {
+            'cko-session-id' : data.id 
+        }
+        const navigationExtras: NavigationExtras = {
+          queryParams: queryParams,
+          queryParamsHandling: 'merge',
+          skipLocationChange:false
+        };
+        this.router.navigate(['/success'], navigationExtras);
       }
     },
       (error) =>{
@@ -582,7 +593,6 @@ break;
         this.alertService.error(`The payment is declined with response message: ${data.response_summary}-${data.response_code} `,this.options)
       }
       else{
-        
         let queryParams = {
             'cko-session-id' : data.id 
         }

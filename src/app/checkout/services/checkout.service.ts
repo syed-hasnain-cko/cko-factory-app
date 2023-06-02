@@ -12,14 +12,13 @@ import { PAYMENT_METHODS } from '../data-store';
 export class CheckoutService {
 
 
-
  
   constructor(private http:HttpClient) { 
  
   }
 
   authorization = '';
- 
+
   postDetails(body:any):Observable<any>{
     this.authorization = localStorage.getItem('secretKey') !== null ? `Bearer ${localStorage.getItem('secretKey')}` : `Bearer ${environment.secretKey}`;
     const httpOptions = {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CheckoutService } from '../../services/checkout.service';
  
@@ -9,7 +9,7 @@ import { CheckoutService } from '../../services/checkout.service';
   styleUrls: ['./response.component.css']
 })
 export class ResponseComponent implements OnInit {
-  
+
   error: boolean = false;
   errorResponse : any;
   data: any ;
@@ -22,9 +22,7 @@ export class ResponseComponent implements OnInit {
     this.path = this.path = this.route.snapshot.routeConfig?.path;
     console.log(this.path)
     if(this.path =='success'){
-      console.log(this.route)
-      this.sessionId = this.route.snapshot.queryParams['cko-session-id']
-        
+      this.sessionId = this.route.snapshot.queryParams['cko-session-id'];
         this.checkoutService.getDetails(this.sessionId).subscribe({next:(data:any)=>{
           console.log(data)
           this.data = data;
