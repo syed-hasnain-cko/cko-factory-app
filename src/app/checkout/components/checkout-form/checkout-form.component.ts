@@ -7,7 +7,7 @@ import { AlertService } from 'src/app/_alert';
 import { environment } from 'src/environments/environment';
 import { NavigationExtras, Router } from '@angular/router';
 import { IPaymentMethod } from '../../interfaces/payment-method-interface';
-import { CURRENCIES, PAYMENT_METHODS } from '../../data-store';
+import { CURRENCIES, PAYMENT_METHODS, PAYPAL_PLANS } from '../../data-store';
  
 const reduceToUniques = (value: any, index: any, self: string | any[]) => {
   return self.indexOf(value) === index;
@@ -44,6 +44,7 @@ export class CheckoutFormComponent implements OnInit {
   show3ds = true;
   apmInvalid = false;
 
+  paypalPlans = PAYPAL_PLANS; 
   Currencies = CURRENCIES.map(currency => currency.iso4217)
   Countries = PAYMENT_METHODS.map(paymentMethod => paymentMethod.restrictedCurrencyCountryPairings).filter(pairing => pairing != null)
   .map(pairing => 
@@ -106,8 +107,14 @@ export class CheckoutFormComponent implements OnInit {
       language: new FormControl('En',[Validators.maxLength(2)]),
       quantity: new FormControl(2,[Validators.min(1)])
     }),
+    multibancoForm:  new FormGroup({
+      paymentCountry: new FormControl('PT',[Validators.required, Validators.maxLength(2)]),
+      accountHolderName: new FormControl('John Smith',[Validators.required, Validators.minLength(3),Validators.maxLength(100)]),
+      billingDescriptor: new FormControl('Multibanco Test Payment',[Validators.maxLength(65534)])
+    }),
     description: new FormControl('Test Payment',[Validators.required, Validators.maxLength(100)]),
-    purpose: new FormControl('Test Payment',[Validators.required, Validators.maxLength(27)])
+    purpose: new FormControl('Test Payment',[Validators.required, Validators.maxLength(27)]),
+    paypalPlan: new FormControl('MERCHANT_INITIATED_BILLING')
   });
   
   token:string ="";
@@ -142,6 +149,11 @@ disableNonActivePaymentMethodFields(apm:any){
   this.showMultibanco = false;
   this.showEPS = false;
   this.showP24 = false;
+  this.showPaypal = false;
+  this.showQpay = false;
+  this.showTrustly = false;
+  this.showKnet = false;
+  this.showBenefitPay =  false;
 
   switch(apm.target.value){
     case 'sofort':{
@@ -218,6 +230,12 @@ break;
       this.disableCardPaymentsFields();
       this.checkoutdetails.controls.country.setValue('BH');
       this.checkoutdetails.controls.currency.setValue('BHD');
+      this.apmToCountryCurrencyMappingValidator();
+break;
+    }
+    case 'paypal':{
+      this.showPaypal = true;
+      this.disableCardPaymentsFields();
       this.apmToCountryCurrencyMappingValidator();
 break;
     }
@@ -429,6 +447,27 @@ break;
      }`; 
      break;
       }
+      case 'paypal':{
+        sourceObject =      
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "plan": "${this.checkoutdetails.controls.paypalPlan.value}"
+     }`;  
+        break;
+       }
+
+       case 'multibanco':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "payment_country": "${this.checkoutdetails.controls.multibancoForm.controls.paymentCountry.value}",
+        "account_holder_name":"${this.checkoutdetails.controls.multibancoForm.controls.accountHolderName.value}",
+        "billing_descriptor":"${this.checkoutdetails.controls.multibancoForm.controls.billingDescriptor.value}"
+     }`;
+     break;
+       }
          
     }
     return sourceObject;
@@ -460,6 +499,13 @@ break;
           "number":this.checkoutdetails.controls.number.value
         }
       },
+      "items":[
+        {
+           "name":"laptop",
+           "unit_price":finalAmount,
+           "quantity":1
+        }
+     ],
       "description": this.checkoutdetails.controls['description'].value,
      "reference": "Order"+ Math.floor(Math.random() * 1000) + 1,
       "shipping":{
@@ -486,7 +532,6 @@ break;
         let queryParams = {
             'cko-session-id' : data.id 
         }
-        console.log(queryParams)
         const navigationExtras: NavigationExtras = {
           queryParams: queryParams,
           queryParamsHandling: 'merge',

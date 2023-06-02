@@ -22,6 +22,7 @@ import { P24SourceComponent } from './components/p24-source/p24-source.component
 import { BancontactSourceComponent } from './components/bancontact-source/bancontact-source.component';
 import { KnetSourceComponent } from './components/knet-source/knet-source.component';
 import { QpaySourceComponent } from './components/qpay-source/qpay-source.component';
+import { MultibancoSourceComponent } from './components/multibanco-source/multibanco-source.component';
 
 
 
@@ -43,6 +44,7 @@ import { QpaySourceComponent } from './components/qpay-source/qpay-source.compon
     BancontactSourceComponent,
     KnetSourceComponent,
     QpaySourceComponent,
+    MultibancoSourceComponent,
   ],
   imports: [
     HttpClientModule,

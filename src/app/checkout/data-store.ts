@@ -1,6 +1,15 @@
 import { ICurrency } from "./interfaces/currency-interface";
 import { IPaymentMethod } from "./interfaces/payment-method-interface";
 
+export const PAYPAL_PLANS= [
+  'MERCHANT_INITIATED_BILLING',
+  'MERCHANT_INITIATED_BILLING_SINGLE_AGREEMENT',
+  'CHANNEL_INITIATED_BILLING',
+  'CHANNEL_INITIATED_BILLING_SINGLE_AGREEMENT',
+  'RECURRING_PAYMENTS',
+  'PRE_APPROVED_PAYMENTS'
+]
+
 export const CURRENCIES: ICurrency[] = [
     { iso4217: 'ARS', base: 100 },
     { iso4217: 'AUD', base: 100 },

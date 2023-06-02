@@ -144,6 +144,11 @@
 </div>
 <div class ="row">
   <div class="col-10"> 
+    <app-multibanco-source *ngIf="showMultibanco" [multibanco]="checkoutdetails.controls.multibancoForm"></app-multibanco-source>
+  </div>
+</div>
+<div class ="row">
+  <div class="col-10"> 
     <app-knet-source *ngIf="showKnet" [knet]="checkoutdetails.controls.knetForm"></app-knet-source>
   </div>
 </div>
@@ -151,6 +156,18 @@
   <div class="col-10"> 
     <app-qpay-source *ngIf="showQpay" [qpay]="checkoutdetails.controls.qpayForm"></app-qpay-source>
   </div>
+</div>
+
+<div class ="row" *ngIf="showPaypal"> 
+  <div class="col-2"> 
+    <label>Plan:</label>  
+  </div>
+<div class="col-8">      
+  <select class="input-box" id="paypalPlan" formControlName="paypalPlan">
+    <option *ngFor="let plan of paypalPlans" [value]="plan">{{plan}}</option>
+  </select>
+</div>
+<div></div>
 </div>
 
  <div class ="row" *ngIf="this.showAuthorizationType">

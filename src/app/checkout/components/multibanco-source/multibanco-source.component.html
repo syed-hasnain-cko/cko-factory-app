@@ -1,0 +1,27 @@
+<form [formGroup]="multibanco">
+    <div class ="row">
+        <div class="col-2">      
+          <label>Payment Country:</label>  
+      </div>
+         <div class="col-8">      
+              <input type="text" class="input-box" id="paymentCountry" formControlName="paymentCountry">
+         </div>
+         <div></div>
+      </div>  
+      <div class ="row">
+        <div class="col-2">      
+          <label>Account Holder Name:</label>  
+      </div>
+        <div class="col-8">
+            <input type="text" class="input-box" id="accountHolderName" formControlName="accountHolderName">
+          </div>
+    </div> 
+    <div class ="row">
+        <div class="col-2">      
+          <label>Billing Descriptor:</label> 
+      </div>
+        <div class="col-8">
+            <input type="text" class="input-box" id="billingDescriptor" formControlName="billingDescriptor">
+          </div>
+    </div> 
+    </form>
