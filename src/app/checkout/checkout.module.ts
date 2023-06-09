@@ -23,6 +23,17 @@ import { BancontactSourceComponent } from './components/bancontact-source/bancon
 import { KnetSourceComponent } from './components/knet-source/knet-source.component';
 import { QpaySourceComponent } from './components/qpay-source/qpay-source.component';
 import { MultibancoSourceComponent } from './components/multibanco-source/multibanco-source.component';
+import { PaymentsListComponent } from './components/payments-list/payments-list.component';
+import { MatPaginatorModule } from "@angular/material/paginator";
+  import {MatTableModule } from "@angular/material/table";
+    import { MatInputModule} from "@angular/material/input";
+    import { MatSortModule} from "@angular/material/sort";
+    import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+    import { MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+    import {MatCardModule} from "@angular/material/card"
+    import {MatIconModule} from "@angular/material/icon"
+import { PaymentDetailComponent } from './components/payment-detail/payment-detail.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
@@ -45,6 +56,11 @@ import { MultibancoSourceComponent } from './components/multibanco-source/multib
     KnetSourceComponent,
     QpaySourceComponent,
     MultibancoSourceComponent,
+    PaymentsListComponent,
+    PaymentDetailComponent
+  ],
+  entryComponents: [
+ PaymentDetailComponent,
   ],
   imports: [
     HttpClientModule,
@@ -53,7 +69,16 @@ import { MultibancoSourceComponent } from './components/multibanco-source/multib
     RouterModule,
     ReactiveFormsModule,
     AlertModule,
-    FormsModule
+    FormsModule,
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatIconModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   providers: [],
 })

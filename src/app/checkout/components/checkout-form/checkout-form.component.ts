@@ -281,6 +281,16 @@ break;
       this.alertService.info('SEPA is not yet available on NAS, Coming Soon!',this.options)
 break;
     }
+    case 'fawry':{
+      this.showFawry = true;
+      this.disableCardPaymentsFields();
+      this.checkoutdetails.controls.country.setValue('EG');
+      this.checkoutdetails.controls.currency.setValue('EGP');
+      this.apmToCountryCurrencyMappingValidator();
+      this.apmInvalid = true;
+      this.alertService.info('Fawry is not yet available on NAS, Coming Soon!',this.options)
+break;
+    }
     case 'frames':{
       this.showFrames = true;
       this.showAuthorizationType = true;
@@ -335,7 +345,7 @@ break;
         }
       },
       "description": this.checkoutdetails.controls['description'].value,
-      "reference": "Order-"+ Math.floor(Math.random() * 1000) + 1,
+      "reference": "Order"+ Math.floor(Math.random() * 1000) + 1,
       "shipping":{
         "address":{
           "address_line1": this.checkoutdetails.controls['address'].value,
@@ -350,12 +360,16 @@ break;
     }
  
     this.checkoutService.postDetails(body).subscribe((data:any)=>{
-      if(data.status == "Pending")
-      this.goToUrl(data._links.redirect.href);
+      if(data.status == "Pending"){
+        this.checkoutService.addPaymentToLocalStorage(data.id);
+        this.goToUrl(data._links.redirect.href);
+      }
+      
       else if(data.status == "Declined"){
         this.alertService.error(`The payment is declined with response message: ${data.response_summary}-${data.response_code} `,this.options)
       }
       else{
+        this.checkoutService.addPaymentToLocalStorage(data.id);
         let queryParams = {
             'cko-session-id' : data.id 
         }
@@ -587,12 +601,16 @@ break;
     }
 
     this.checkoutService.postDetails(paymentRequestBody).subscribe((data:any)=>{
-      if(data.status == "Pending")
-      this.goToUrl(data._links.redirect.href);
+      if(data.status == "Pending"){
+        this.checkoutService.addPaymentToLocalStorage(data.id);
+        this.goToUrl(data._links.redirect.href);
+      }
+      
       else if(data.status == "Declined"){
         this.alertService.error(`The payment is declined with response message: ${data.response_summary}-${data.response_code} `,this.options)
       }
       else{
+        this.checkoutService.addPaymentToLocalStorage(data.id);
         let queryParams = {
             'cko-session-id' : data.id 
         }

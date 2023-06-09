@@ -26,14 +26,13 @@ export class FrameComponent implements OnInit {
     this.renderer.appendChild(document.head, script);
     Frames.init(
       {
-        publicKey:"pk_sbox_7za2ppcb4pw7zzdkfzutahfjl4t",
+        publicKey:localStorage.getItem('publicKey'),
         style: frameStyle,
         schemeChoice: true
   });
     Frames.addEventHandler(
       Frames.Events.CARD_VALIDATION_CHANGED,
        (event:any) => {
-        console.log("CARD_VALIDATION_CHANGED: %o", event);
         this.togglePayButton(!Frames.isCardValid());
        this.cd.detectChanges();
       }
@@ -52,7 +51,6 @@ export class FrameComponent implements OnInit {
   togglePayButton(cardValid: boolean) {
     
     this.disablePayButton = cardValid;
-    console.log(this.disablePayButton);
   }
  
  

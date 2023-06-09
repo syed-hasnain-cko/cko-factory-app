@@ -1,0 +1,49 @@
+
+
+div.row {
+ 
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .mat-card {
+    flex: 1 1 auto;
+  }
+
+  @media (max-width: 767px) {
+     .mat-card {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 768px) {
+     .mat-card {
+      max-width: 1024px;
+    }
+  }
+
+  .mat-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .order-table {
+    flex: 1 1 auto;
+  }
+
+  .order-table tr {
+    font-family: monospace;
+  }
+
+  .payment-method-icon {
+    vertical-align: middle;
+    height: 40px;
+  }
+
+  .payment-json {
+    font-size: 0.8em;
+    overflow-x: scroll;
+  }
+
+

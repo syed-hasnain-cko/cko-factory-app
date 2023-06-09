@@ -1,0 +1,50 @@
+
+
+
+
+.payment-method-container {
+  display: flex;
+  align-items: center;
+}
+
+.payment-method-icon {
+  vertical-align: middle;
+  height: 40px;
+  margin-left: 10px;
+}
+
+
+
+
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.form-field {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-input-element {
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  padding: 8px;
+  color: #333;
+}

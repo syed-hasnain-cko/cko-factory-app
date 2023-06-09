@@ -1,0 +1,140 @@
+<h1 mat-dialog-title>Payment Details</h1>
+<div mat-dialog-content>
+  <form [formGroup]="paymentDetails">
+    <div class="form-row">
+      <div class="form-field">
+        <mat-label>Payment Id:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="paymentId" [readonly]="true">
+      </mat-form-field>
+      </div>
+  
+      <div class="form-field">
+        <mat-label>Status:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="status" [readonly]="true">
+      </mat-form-field>
+      </div>
+    </div>
+  
+    <div class="form-row">
+      <div class="form-field">
+        <mat-label>Amount:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="amount" [readonly]="true">
+      </mat-form-field>
+      </div>
+  
+      <div class="form-field">
+        <mat-label>Reference:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="reference" [readonly]="true">
+      </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <mat-label>Currency:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="currency" [readonly]="true">
+      </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-label>Payment Method:</mat-label>
+        <div class="payment-method-container">
+          <mat-form-field appearance="fill">
+            <input matInput formControlName="paymentMethod" [readonly]="true">
+          </mat-form-field>
+       
+        </div>
+      </div>
+ 
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <mat-label>Customer Name:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="customerName" [readonly]="true">
+      </mat-form-field>
+
+      
+      </div>
+  
+      <div class="form-field">
+        <mat-label>Customer Email:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="customerEmail" [readonly]="true">
+      </mat-form-field>
+      </div>
+    </div>
+
+ 
+
+
+    <h2 *ngIf="isCardPayment">Card Information</h2>
+
+    <div class="form-row" *ngIf="isCardPayment">
+      <div class="form-field">
+        <mat-label>Expiry Month:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="expiryMonth" [readonly]="true">
+      </mat-form-field>
+      </div>
+
+  <div class="form-field">
+      <mat-label>Expiry Year:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="expiryYear" [readonly]="true">
+      </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row" *ngIf="isCardPayment">
+      <div class="form-field">
+        <mat-label>Last4:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="last4" [readonly]="true">
+      </mat-form-field>
+      </div>
+  
+      <div class="form-field">
+        <mat-label>Bin:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="bin" [readonly]="true">
+      </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-row" *ngIf="isCardPayment">
+      <div class="form-field">
+        <mat-label>Card Type:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="cardType" [readonly]="true">
+      </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-label>Issuing Country:</mat-label>
+      <mat-form-field appearance="fill">
+        <input matInput formControlName="issuerCountry" [readonly]="true">
+      </mat-form-field>
+      </div>
+  
+    </div>
+
+  
+    <div class="button-row">
+
+    </div>
+  </form>  
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="warn" id="refundCancelButton" (click)="onNoClick()">Cancel</button>
+  <button mat-button color="warn" [disabled]="refundDisabled">Refund</button>
+  <button mat-button color="warn" [disabled]="captureDisabled">Capture</button>
+  <button mat-button color="warn" [disabled]="voidDisabled">Void</button>
+  <button *ngIf="isCardPayment" mat-button color="warn" [disabled]="incrementAuthDisabled">Increment Auth</button>
+</div>
