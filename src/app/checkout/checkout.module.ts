@@ -34,8 +34,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     import {MatIconModule} from "@angular/material/icon"
 import { PaymentDetailComponent } from './components/payment-detail/payment-detail.component';
 import { MatButtonModule } from '@angular/material/button';
-
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -78,7 +77,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatCardModule,
     MatIconModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSnackBarModule
   ],
   providers: [],
 })

@@ -161,3 +161,19 @@ export const CURRENCIES: ICurrency[] = [
         }
       }
   ]
+
+  export enum WebhookEvents {
+    Pending = 'payment_pending',
+    Authorized = 'payment_approved',
+    Voided = 'payment_voided',
+    VoidDeclined = 'payment_void_declined',
+    CapturePending = 'payment_capture_pending',
+    Captured = 'payment_captured',
+    CapturedDeclined = 'payment_capture_declined',
+    RefundPending = 'payment_refund_pending',
+    Refunded = 'payment_refunded',
+    RefundDeclined = 'payment_refund_declined',
+    Canceled = 'payment_canceled',
+    Expired = 'payment_expired',
+    Declined = 'payment_declined'
+  }

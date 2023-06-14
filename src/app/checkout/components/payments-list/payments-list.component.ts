@@ -6,6 +6,7 @@ import { CURRENCIES } from '../../data-store';
 import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentDetailComponent } from '../payment-detail/payment-detail.component';
+import { WebsocketService } from '../../services/websocket.service';
 
 @Component({
   selector: 'app-payments-list',
@@ -22,12 +23,15 @@ export class PaymentsListComponent implements OnInit{
   sort!: MatSort;
 
   constructor(
-    protected checkoutService: CheckoutService, private dialog: MatDialog
+    protected checkoutService: CheckoutService, private dialog: MatDialog, private websocketService: WebsocketService
   ) {
    
   }
 
   ngOnInit(){
+
+
+  
     
     let recordedOrders: string[] = JSON.parse(localStorage.getItem('payments') || '[]');
     if (recordedOrders !== null) {

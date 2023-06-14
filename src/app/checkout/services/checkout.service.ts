@@ -11,16 +11,16 @@ import { PAYMENT_METHODS } from '../data-store';
 })
 export class CheckoutService {
 
-
+  authorization = '';
  
   constructor(private http:HttpClient) { 
- 
+    this.authorization = localStorage.getItem('secretKey') !== null ? `Bearer ${localStorage.getItem('secretKey')}` : `Bearer ${environment.secretKey}`;
   }
 
-  authorization = '';
+
 
   postDetails(body:any):Observable<any>{
-    this.authorization = localStorage.getItem('secretKey') !== null ? `Bearer ${localStorage.getItem('secretKey')}` : `Bearer ${environment.secretKey}`;
+
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': this.authorization})
     };
@@ -28,12 +28,20 @@ export class CheckoutService {
   }
  
   getDetails(id: string):Observable<any>{
-    this.authorization = localStorage.getItem('secretKey') !== null ? `Bearer ${localStorage.getItem('secretKey')}` : `Bearer ${environment.secretKey}`;
+    
     const url = `${environment.baseAPIUrl}/payments/${id}`;
     const httpOptions = {
       headers: new HttpHeaders({ 'Authorization': this.authorization})
     };
     return this.http.get<any>(url, httpOptions);
+  }
+
+  executePaymentAction(uri:any, id:any):Observable<any>{
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Authorization': this.authorization})
+    };
+    return this.http.post<any>(uri,httpOptions);
   }
 
   public addPaymentToLocalStorage(id: string) {
@@ -50,6 +58,7 @@ export class CheckoutService {
   public paymentMethodIcon(payment: any): string {
     return payment.source.type == 'card' ? (<string>payment.source["scheme"]).toLowerCase() : payment.source.type;
   }
+
 }
 
 
