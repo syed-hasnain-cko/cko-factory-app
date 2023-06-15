@@ -334,8 +334,8 @@ break;
       "capture":this.checkoutdetails.controls['capture'].value,
       "authorization_type":this.checkoutdetails.controls['authorizationType'].value,
       "processing_channel_id":localStorage.getItem('processingChannelId') !== null ? localStorage.getItem('processingChannelId') : environment.processingChannelId,
-      "success_url":"http://localhost:4200/success",
-      "failure_url":"http://localhost:4200/failure",
+      "success_url":"http://localhost:3080/success",
+      "failure_url":"http://localhost:3080/failure",
       "customer":{
         "name":this.checkoutdetails.controls['name'].value,
         "email":this.checkoutdetails.controls['email'].value,
@@ -568,8 +568,8 @@ break;
       "amount":finalAmount,
       "currency":this.checkoutdetails.controls['currency'].value,
       "processing_channel_id":localStorage.getItem('processingChannelId') !== null ? localStorage.getItem('processingChannelId') : environment.processingChannelId,
-      "success_url":"http://localhost:4200/success",
-      "failure_url":"http://localhost:4200/failure",
+      "success_url":"http://localhost:3080/success",
+      "failure_url":"http://localhost:3080/failure",
       "customer":{
         "name":this.checkoutdetails.controls['name'].value,
         "email":this.checkoutdetails.controls['email'].value,

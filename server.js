@@ -4,10 +4,10 @@ const EventEmitter = require('events');
 const myEmitter = new EventEmitter();
 const express = require('express');
 const app = express(),
-      bodyParser = require("body-parser");
-      port = 3080;
-      const WebSocket = require('ws');
-      const cors = require('cors');
+bodyParser = require("body-parser");
+port = 3080;
+const WebSocket = require('ws');
+const cors = require('cors');
 
 
 app.use(bodyParser.json());
@@ -24,7 +24,6 @@ const server = app.listen(port, () => {
 });
 
 app.post("/webhook", (req, res) => {
-  console.log(req.body) 
   if (clients.has(req.body.data.id)) {
     const ws = clients.get(req.body.data.id);
     ws.send(JSON.stringify(req.body));
@@ -35,18 +34,14 @@ app.post("/webhook", (req, res) => {
   }
 })
 
-
-// Create a WebSocket server
 const wss = new WebSocket.Server({ port: 3081});
-
-// Handle incoming WebSocket connections
 
 // Store connected clients
 const clients = new Map();
 
 // Handle incoming WebSocket connections
 wss.on('connection', (ws, request) => {
-  const paymentId = request.url.slice(1); // Remove the leading slash
+  const paymentId = request.url.slice(1); 
   clients.set(paymentId, ws);
   
   ws.on('close', () => {

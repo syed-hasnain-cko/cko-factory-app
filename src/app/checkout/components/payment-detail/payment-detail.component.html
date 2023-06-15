@@ -133,9 +133,9 @@
 
 </div>
 <div mat-dialog-actions>
-  <button mat-button color="warn" id="cancelButton" (click)="onNoClick()">Cancel</button>
-  <button *ngIf="!refundDisabled" mat-button color="accent" id="actionButton" [disabled]="refundDisabled" [ngClass]="{'disabled-button': refundDisabled}" (click)="executePaymentAction(dataModel._links?.refund?.href, dataModel.id)">Refund</button>
-  <button *ngIf="!captureDisabled" mat-button color="accent" id="actionButton" [disabled]="captureDisabled" [ngClass]="{'disabled-button': captureDisabled}" (click)="executePaymentAction(dataModel._links?.capture?.href, dataModel.id)">Capture</button>
-  <button *ngIf="!voidDisabled" mat-button color="accent" id="actionButton" [disabled]="voidDisabled" [ngClass]="{'disabled-button': voidDisabled}" (click)="executePaymentAction(dataModel._links?.void?.href, dataModel.id)">Void</button>
-  <button *ngIf="isCardPayment && !incrementAuthDisabled"  id="actionButton" mat-button color="accent" [disabled]="incrementAuthDisabled" [ngClass]="{'disabled-button': incrementAuthDisabled}" (click)="executePaymentAction(dataModel._links?.authorizations?.href, dataModel.id)">Increment Authorization</button>
+  <button mat-button color="warn" id="cancelButton" (click)="onNoClick()" [disabled]="isProcessing">Cancel</button>
+  <button *ngIf="!refundDisabled" mat-button color="accent" id="actionButton" [disabled]="refundDisabled || isProcessing" [ngClass]="{'disabled-button': refundDisabled}" (click)="executePaymentAction(dataModel._links?.refund?.href, dataModel.id)">Refund</button>
+  <button *ngIf="!captureDisabled" mat-button color="accent" id="actionButton" [disabled]="captureDisabled || isProcessing" [ngClass]="{'disabled-button': captureDisabled}" (click)="executePaymentAction(dataModel._links?.capture?.href, dataModel.id)">Capture</button>
+  <button *ngIf="!voidDisabled" mat-button color="accent" id="actionButton" [disabled]="voidDisabled || isProcessing" [ngClass]="{'disabled-button': voidDisabled}" (click)="executePaymentAction(dataModel._links?.void?.href, dataModel.id)">Void</button>
+  <button *ngIf="isCardPayment && !incrementAuthDisabled"  id="actionButton" mat-button color="accent" [disabled]="incrementAuthDisabled || isProcessing" [ngClass]="{'disabled-button': incrementAuthDisabled}" (click)="executePaymentAction(dataModel._links?.authorizations?.href, dataModel.id)">Increment Authorization</button>
 </div>

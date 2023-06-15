@@ -17,11 +17,9 @@ export class CheckoutService {
     this.authorization = localStorage.getItem('secretKey') !== null ? `Bearer ${localStorage.getItem('secretKey')}` : `Bearer ${environment.secretKey}`;
   }
 
-
-
   postDetails(body:any):Observable<any>{
 
-    const httpOptions = {
+    let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': this.authorization})
     };
     return this.http.post<any>(`${environment.baseAPIUrl}/payments`, body , httpOptions);
@@ -29,8 +27,8 @@ export class CheckoutService {
  
   getDetails(id: string):Observable<any>{
     
-    const url = `${environment.baseAPIUrl}/payments/${id}`;
-    const httpOptions = {
+    let url = `${environment.baseAPIUrl}/payments/${id}`;
+    let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': this.authorization})
     };
     return this.http.get<any>(url, httpOptions);
@@ -38,10 +36,10 @@ export class CheckoutService {
 
   executePaymentAction(uri:any, id:any):Observable<any>{
 
-    const httpOptions = {
-      headers: new HttpHeaders({ 'Authorization': this.authorization})
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization': this.authorization})
     };
-    return this.http.post<any>(uri,httpOptions);
+    return this.http.post<any>(uri,null,httpOptions);
   }
 
   public addPaymentToLocalStorage(id: string) {

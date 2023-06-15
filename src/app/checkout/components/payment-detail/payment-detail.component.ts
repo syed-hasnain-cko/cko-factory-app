@@ -4,9 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CheckoutService } from '../../services/checkout.service';
 import { WebsocketService } from '../../services/websocket.service';
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { WebhookEvents } from '../../data-store';
-
 
 @Component({
   selector: 'app-payment-detail',
@@ -18,6 +17,7 @@ import { WebhookEvents } from '../../data-store';
 export class PaymentDetailComponent implements OnInit{
 
  
+  isProcessing: boolean = false;
   isCardPayment: boolean = false;
   refundDisabled: boolean = true;
   captureDisabled: boolean = true;
@@ -40,11 +40,7 @@ export class PaymentDetailComponent implements OnInit{
   ngOnInit() {
 
     this.dataModel = this.paymentData.paymentData;
-    console.log(this.dataModel)
-    this.refundDisabled = this.dataModel?._links?.refund?.href ? false : true;
-    this.captureDisabled = this.dataModel?._links?.capture?.href ? false : true;
-    this.voidDisabled = this.dataModel._links?.void?.href ? false : true;
-    this.incrementAuthDisabled = this.dataModel?._links?.authorizations?.href ? false : true;
+    this.setActionLinks(this.dataModel);
     this.isCardPayment = this.dataModel?.source.type == 'card' ? true : false;
 
     this.paymentDetails = new FormGroup({
@@ -64,12 +60,18 @@ export class PaymentDetailComponent implements OnInit{
       cardType: new FormControl(this.isCardPayment? this.dataModel.source.card_type : 'N/A')
     });
 
-    this.websocketSubscription = this.websocketService.connect(this.dataModel.id)
+    this.websocketSubscription = this.websocketService.connect(this.dataModel.id).pipe(
+      tap(
+        ()=>{
+          this.isProcessing = false;
+        }
+      )
+    )
       .subscribe(
         (data) => {
-          let status = '';
           let webhook = JSON.parse(data);
-          this.setStatusOnWebhook(webhook.type)
+          this.setActionLinks(webhook);
+          this.setStatusOnWebhook(webhook.type);
         },
         (error) => {
           console.error('WebSocket error:', error);
@@ -79,7 +81,7 @@ export class PaymentDetailComponent implements OnInit{
           console.log('WebSocket connection closed');
           this.showSnackbar('WebSocket connection closed');
         }
-      );
+      )
 
   }
 
@@ -97,6 +99,7 @@ export class PaymentDetailComponent implements OnInit{
   }
 
   executePaymentAction(uri: any, paymentId: any){
+    this.isProcessing = true;
     this.checkoutService.executePaymentAction(uri,paymentId).subscribe(response=>{
       console.log(response)
      });
@@ -104,15 +107,14 @@ export class PaymentDetailComponent implements OnInit{
 
   private showSnackbar(message: string): void {
     this.snackbar.open(message, 'Close', {
-      duration: 5000 // Snackbar display duration in milliseconds
+      duration: 5000 
     });
   }
 
   private setStatusOnWebhook(webhookEvent : string){
 
-    console.log(webhookEvent)
-    let webhookType  = Object.values(WebhookEvents).find(event => event == webhookEvent)
-    console.log(webhookType)
+    let webhookType  = Object.values(WebhookEvents).find(event => event == webhookEvent);
+
     switch(webhookType){
       
       case WebhookEvents.Authorized : {
@@ -183,4 +185,12 @@ export class PaymentDetailComponent implements OnInit{
 
     }
   }
+
+ setActionLinks(payment:any){
+  this.dataModel._links = payment?._links;
+  this.refundDisabled = payment?._links?.refund?.href ? false : true;
+  this.captureDisabled = payment?._links?.capture?.href ? false : true;
+  this.voidDisabled = payment._links?.void?.href ? false : true;
+  this.incrementAuthDisabled = payment?._links?.authorizations?.href ? false : true;
+ }
 }
