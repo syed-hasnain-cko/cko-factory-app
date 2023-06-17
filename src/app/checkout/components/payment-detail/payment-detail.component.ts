@@ -101,7 +101,6 @@ export class PaymentDetailComponent implements OnInit{
   executePaymentAction(uri: any, paymentId: any){
     this.isProcessing = true;
     this.checkoutService.executePaymentAction(uri,paymentId).subscribe(response=>{
-      console.log(response)
      });
   }
 

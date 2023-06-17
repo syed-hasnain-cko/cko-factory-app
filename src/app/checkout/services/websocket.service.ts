@@ -11,8 +11,9 @@ export class WebsocketService {
   private socket!: WebSocket;
 
   public connect(paymentId: string): Observable<any> {
+    if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
     this.socket = new WebSocket(`ws://localhost:3081/${paymentId}`);
-    
+    }
     return new Observable(observer => {
       this.socket.onmessage = (event) => {
         observer.next(event.data);
@@ -26,7 +27,8 @@ export class WebsocketService {
         observer.complete();
       };
     });
-  }
+  
+}
   
   public disconnect(): void {
     if (this.socket) {
