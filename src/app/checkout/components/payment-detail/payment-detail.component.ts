@@ -60,7 +60,7 @@ export class PaymentDetailComponent implements OnInit{
       cardType: new FormControl(this.isCardPayment? this.dataModel.source.card_type : 'N/A')
     });
 
-    this.websocketSubscription = this.websocketService.connect(this.dataModel.id).pipe(
+    this.websocketSubscription = this.websocketService.getMessageSubject().pipe(
       tap(
         ()=>{
           this.isProcessing = false;
@@ -68,8 +68,7 @@ export class PaymentDetailComponent implements OnInit{
       )
     )
       .subscribe(
-        (data) => {
-          let webhook = JSON.parse(data);
+        (webhook) => {
           this.setActionLinks(webhook);
           this.setStatusOnWebhook(webhook.type);
         },
@@ -87,7 +86,6 @@ export class PaymentDetailComponent implements OnInit{
 
   ngOnDestroy() {
     this.websocketSubscription.unsubscribe();
-    this.websocketService.disconnect();
   }
 
   onNoClick(): void {

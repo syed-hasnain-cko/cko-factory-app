@@ -54,8 +54,8 @@ export class PaymentsListComponent implements OnInit{
           this.dataSource = new MatTableDataSource(this.orders);
           this.dataSource.sort = this.sort;
         })
-        const subscription = this.websocketService.connect(paymentId).subscribe((data)=>{
-          let webhook = JSON.parse(data);
+        const subscription = this.websocketService.getMessageSubject().subscribe((webhook)=>{
+ 
           const payment = this.dataSource.data.find((payId) => payId.id === webhook?.data?.id);
           if(payment){
             this.setStatusOnWebhook(webhook,payment);
@@ -83,7 +83,6 @@ export class PaymentsListComponent implements OnInit{
     this.websocketSubscription.forEach((subscription) => {
       subscription.unsubscribe();
     });
-    this.websocketService.disconnect();
   }
 
    paymentMethodIcon(payment: any): string {

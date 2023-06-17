@@ -24,28 +24,24 @@ const server = app.listen(port, () => {
 });
 
 app.post("/webhook", (req, res) => {
-  if (clients.has(req.body.data.id)) {
-    const ws = clients.get(req.body.data.id);
-    ws.send(JSON.stringify(req.body));
-    
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(404);
-  }
+  const webhookString = JSON.stringify(req.body); 
+  clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(webhookString);
+    }
+  });
+  res.sendStatus(200);
 })
 
-const wss = new WebSocket.Server({ port: 3081});
-
-// Store connected clients
-const clients = new Map();
+const wss = new WebSocket.Server({ port:3081 });
+const clients = new Set();
 
 // Handle incoming WebSocket connections
-wss.on('connection', (ws, request) => {
-  const paymentId = request.url.slice(1); 
-  clients.set(paymentId, ws);
+wss.on('connection', (ws) => {
+  clients.add(ws);
   
   ws.on('close', () => {
-    clients.delete(paymentId);
+    clients.delete(ws);
   });
 });
 
@@ -54,6 +50,7 @@ server.on('upgrade', (request, socket, head) => {
     wss.emit('connection', ws, request);
   });
 });
+
 
   myEmitter.on('error', (err) => {
     console.error('An error occurred:', err);
