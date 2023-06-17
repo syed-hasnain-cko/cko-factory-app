@@ -54,7 +54,7 @@ export class PaymentsListComponent implements OnInit{
           this.dataSource = new MatTableDataSource(this.orders);
           this.dataSource.sort = this.sort;
         })
-        const subscription = this.websocketService.getMessageSubject().subscribe((webhook)=>{
+        const subscription = this.websocketService.getwebhookSubject().subscribe((webhook)=>{
  
           const payment = this.dataSource.data.find((payId) => payId.id === webhook?.data?.id);
           if(payment){
@@ -179,8 +179,6 @@ export class PaymentsListComponent implements OnInit{
       }
 
     }
-
-
   }
 
   private showSnackbar(message: string): void {

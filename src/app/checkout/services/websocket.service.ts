@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class WebsocketService {
 
   private socket: WebSocket;
-  private messageSubject: Subject<any> = new Subject<any>();
+  private webhookSubject: Subject<any> = new Subject<any>();
 
   constructor() {
 
@@ -17,11 +17,11 @@ export class WebsocketService {
 
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      this.messageSubject.next(data);
+      this.webhookSubject.next(data);
     };
   }
 
-  public getMessageSubject() {
-    return this.messageSubject.asObservable();
+  public getwebhookSubject() {
+    return this.webhookSubject.asObservable();
   }
 }
