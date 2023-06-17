@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -8,29 +8,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class WebsocketService {
 
-  private socket!: WebSocket;
+  private socket: WebSocket;
+  private messageSubject: Subject<any> = new Subject<any>();
 
-  public connect(paymentId: string): Observable<any> {
-    this.socket = new WebSocket(`ws://localhost:3081/${paymentId}`);
-    
-    return new Observable(observer => {
-      this.socket.onmessage = (event) => {
-        observer.next(event.data);
-      };
-      
-      this.socket.onerror = (event) => {
-        observer.error(event);
-      };
-      
-      this.socket.onclose = () => {
-        observer.complete();
-      };
-    });
+  constructor() {
+
+    this.socket = new WebSocket('ws://localhost:3081/');
+
+    this.socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      this.messageSubject.next(data);
+    };
   }
-  
-  public disconnect(): void {
-    if (this.socket) {
-      this.socket.close();
-    }
+
+  public getMessageSubject() {
+    return this.messageSubject.asObservable();
   }
 }
