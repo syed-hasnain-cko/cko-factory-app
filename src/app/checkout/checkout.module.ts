@@ -58,9 +58,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     PaymentsListComponent,
     PaymentDetailComponent
   ],
-  entryComponents: [
- PaymentDetailComponent,
-  ],
   imports: [
     HttpClientModule,
     CheckoutRoutingModule,

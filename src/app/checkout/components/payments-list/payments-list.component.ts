@@ -9,6 +9,8 @@ import { PaymentDetailComponent } from '../payment-detail/payment-detail.compone
 import { WebsocketService } from '../../services/websocket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription, tap } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-payments-list',
@@ -17,7 +19,12 @@ import { Subscription, tap } from 'rxjs';
 })
 export class PaymentsListComponent implements OnInit{
 
-  orders: any[] = []; 
+  orders: any[] = [];
+  recordedOrders = [] 
+  public currentPageNumber: number = 1; 
+  public currentPageIndex: number = 0; 
+  public pageSize: number = 10; 
+  public totalOrders: number = 0;
   dataSource!: MatTableDataSource<any>;
   displayedColumns: string[] = ['requested_on', 'id', 'amount', 'status', 'source'];
   isDataLoaded: boolean = false;
@@ -34,9 +41,21 @@ export class PaymentsListComponent implements OnInit{
 
   ngOnInit(){
     
-    let recordedOrders: string[] = JSON.parse(localStorage.getItem('payments') || '[]');
-    if (recordedOrders !== null) {
-      recordedOrders.forEach(paymentId => {
+    this.recordedOrders = JSON.parse(localStorage.getItem('payments') || '[]');
+    this.loadPayments(this.recordedOrders);
+     
+  }
+
+  loadPayments(orders:any): void {
+
+    let paymentsToLoad = [];
+    this.orders = [];
+    const startIndex = (this.currentPageNumber - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.totalOrders = orders.length;
+    paymentsToLoad = orders.slice(startIndex, endIndex);
+    if (paymentsToLoad !== null) {
+      paymentsToLoad.forEach((paymentId: string) => {
         this.checkoutService.getDetails(paymentId).subscribe(response => {
           if (!this.orders) {
             this.orders = [response]
@@ -73,16 +92,23 @@ export class PaymentsListComponent implements OnInit{
         this.websocketSubscription.push(subscription);
       }
       );
+      
       this.isDataLoaded = true  
       
     }
-     
   }
 
   ngOnDestroy() {
     this.websocketSubscription.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.currentPageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.currentPageNumber = this.currentPageIndex+1;
+    this.loadPayments(this.recordedOrders);
   }
 
    paymentMethodIcon(payment: any): string {
