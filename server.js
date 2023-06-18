@@ -15,7 +15,7 @@ app.use(cors());
 
 app.use(express.static(process.cwd()+"/dist/cko-factory-app/"));
 
-app.get('/', (req,res) => {
+app.get('*', (req,res) => {
     res.sendFile(process.cwd()+"/dist/cko-factory-app/index.html")
   });
 

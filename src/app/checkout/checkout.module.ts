@@ -35,6 +35,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { PaymentDetailComponent } from './components/payment-detail/payment-detail.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AppRoutingModule } from '../app-routing.module';
 
 
 @NgModule({
