@@ -158,6 +158,11 @@ export class PaymentsListComponent implements OnInit{
         this.showSnackbar(`Payment status updated for ${webhook.data.id}: ${order.status}`);
         break;
       }
+      case WebhookEvents.Returned : {
+        order.status = 'Returned';
+        this.showSnackbar(`Payment status updated for ${webhook.data.id}: ${order.status}`);
+        break;
+      }
       case WebhookEvents.CapturePending : {
         order.status = 'CapturePending';
         this.showSnackbar(`Payment status updated for ${webhook.data.id}: ${order.status}`);

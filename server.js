@@ -24,6 +24,7 @@ const server = app.listen(port, () => {
 });
 
 app.post("/webhook", (req, res) => {
+  console.log(req.body)
   const webhookString = JSON.stringify(req.body); 
   clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -36,7 +37,6 @@ app.post("/webhook", (req, res) => {
 const wss = new WebSocket.Server({ port:3081 });
 const clients = new Set();
 
-// Handle incoming WebSocket connections
 wss.on('connection', (ws) => {
   clients.add(ws);
   

@@ -175,5 +175,6 @@ export const CURRENCIES: ICurrency[] = [
     RefundDeclined = 'payment_refund_declined',
     Canceled = 'payment_canceled',
     Expired = 'payment_expired',
-    Declined = 'payment_declined'
+    Declined = 'payment_declined',
+    Returned = 'payment_returned'
   }

@@ -36,6 +36,7 @@ import { PaymentDetailComponent } from './components/payment-detail/payment-deta
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppRoutingModule } from '../app-routing.module';
+import { SepaSourceComponent } from './components/sepa-source/sepa-source.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { AppRoutingModule } from '../app-routing.module';
     QpaySourceComponent,
     MultibancoSourceComponent,
     PaymentsListComponent,
-    PaymentDetailComponent
+    PaymentDetailComponent,
+    SepaSourceComponent
   ],
   imports: [
     HttpClientModule,

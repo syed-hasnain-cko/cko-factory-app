@@ -1,0 +1,62 @@
+<form [formGroup]="sepa">
+   
+
+  <div class ="row">
+      <div class="col-2">      
+        <label>Account Number:</label>  
+    </div>
+       <div class="col-8">      
+            <input type="text" class="input-box" id="accountNumber" formControlName="accountNumber">
+       </div>
+       <div></div>
+    </div>  
+  <div class ="row">
+      <div class="col-2">      
+        <label>Bank Code:</label>  
+    </div>
+      <div class="col-8">
+          <input type="text" class="input-box" id="bankCode" formControlName="bankCode">
+        </div>
+  </div> 
+  <div class ="row">
+      <div class="col-2">      
+        <label>Date Of Signature:</label>  
+    </div>
+      <div class="col-8">
+          <input type="date" class="input-box" id="dateOfSignature" formControlName="dateOfSignature" placeholder="yyyy-MM-dd">
+        </div>
+  </div> 
+  <div class ="row">
+    <h3>Account Holder Details:</h3>
+    <br>
+  </div>
+  <div class ="row">
+    <div class="col-2">      
+      <label>First Name:</label>  
+  </div>
+    <div class="col-3">
+        <input type="text" class="input-box" id="firstName" formControlName="firstName">
+      </div>
+      <div class="col-2">      
+        <label>Last Name:</label>  
+    </div>
+      <div class="col-3">
+          <input type="text" class="input-box" id="lastName" formControlName="lastName">
+        </div>
+</div> 
+<div class ="row">
+    <div class="col-2">      
+      <label>Street Name:</label>  
+  </div>
+    <div class="col-3">
+        <input type="text" class="input-box" id="addressLine1" formControlName="addressLine1">
+      </div>
+      <div class="col-2">      
+        <label>Street Number</label>  
+    </div>
+      <div class="col-3">
+          <input type="text" class="input-box" id="addressLine2" formControlName="addressLine2">
+        </div>
+</div> 
+
+  </form>

@@ -118,6 +118,16 @@ export class CheckoutFormComponent implements OnInit {
       accountHolderName: new FormControl('John Smith',[Validators.required, Validators.minLength(3),Validators.maxLength(100)]),
       billingDescriptor: new FormControl('Multibanco Test Payment',[Validators.maxLength(65534)])
     }),
+    sepaForm: new FormGroup({
+      accountNumber: new FormControl('CH7709000000403458523',[Validators.required]),
+      bankCode: new FormControl('123456789', [Validators.required]),
+      dateOfSignature: new FormControl(this.getCurrentDate(),[Validators.required]),
+      firstName : new FormControl('Syed',[Validators.required]),
+      lastName : new FormControl('Hasnain',[Validators.required]),
+      addressLine1 : new FormControl('Angerstrasse',[Validators.required]),
+      addressLine2 : new FormControl('23',[Validators.required])
+
+    }),
     description: new FormControl('Test Payment',[Validators.required, Validators.maxLength(100)]),
     purpose: new FormControl('Test Payment',[Validators.required, Validators.maxLength(27)]),
     paypalPlan: new FormControl('MERCHANT_INITIATED_BILLING')
@@ -137,6 +147,14 @@ export class CheckoutFormComponent implements OnInit {
     keepAfterRouteChange: false,
     id: "alert-http-failure"
 };
+
+getCurrentDate(): string {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  const day = today.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 
 disableCardPaymentsFields(){
@@ -271,14 +289,11 @@ break;
 break;
     }
     case 'sepa':{
-      this.apmInvalid = true;
       this.showSepa = true;
       this.disableCardPaymentsFields();
       this.checkoutdetails.controls.country.setValue('DE');
       this.checkoutdetails.controls.currency.setValue('EUR');
       this.apmToCountryCurrencyMappingValidator();
-      this.apmInvalid = true;
-      this.alertService.info('SEPA is not yet available on NAS, Coming Soon!',this.options)
 break;
     }
     case 'fawry':{
@@ -547,6 +562,32 @@ break;
      }`;
      break;
        }
+
+       case 'sepa':{
+        sourceObject = 
+        `
+        {
+        "type": "${this.checkoutdetails.controls.paymentMethod.value}",
+        "country":"${this.checkoutdetails.controls.country.value}",
+        "currency":"${this.checkoutdetails.controls.currency.value}",
+        "account_number":"${this.checkoutdetails.controls.sepaForm.controls.accountNumber.value}",
+        "bank_code":"${this.checkoutdetails.controls.sepaForm.controls.bankCode.value}",
+        "date_of_signature":"${this.checkoutdetails.controls.sepaForm.controls.dateOfSignature.value}",
+        "mandate_id": "mandate_${Math.floor(Math.random() * 1000) + 1}",
+        "account_holder":{
+          "first_name":"${this.checkoutdetails.controls.sepaForm.controls.firstName}",
+          "last_name":"${this.checkoutdetails.controls.sepaForm.controls.lastName}",
+        "billing_address":{
+          "address_line1":"${this.checkoutdetails.controls.sepaForm.controls.addressLine1.value}",
+          "address_line2":"${this.checkoutdetails.controls.sepaForm.controls.addressLine2.value}",
+          "city":"${this.checkoutdetails.controls.city.value}",
+          "country":"${this.checkoutdetails.controls.country.value}",
+          "zip":"${this.checkoutdetails.controls.zip.value}"
+        }
+      }
+     }`;
+     break;
+       }
          
     }
     return sourceObject;
@@ -601,7 +642,7 @@ break;
     }
 
     this.checkoutService.postDetails(paymentRequestBody).subscribe((data:any)=>{
-      if(data.status == "Pending"){
+      if(data.status == "Pending" && data.source.type != 'sepa'){
         this.checkoutService.addPaymentToLocalStorage(data.id);
         this.goToUrl(data._links.redirect.href);
       }

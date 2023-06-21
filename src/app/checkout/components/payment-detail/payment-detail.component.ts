@@ -23,6 +23,10 @@ export class PaymentDetailComponent implements OnInit{
   captureDisabled: boolean = true;
   voidDisabled: boolean = true;
   incrementAuthDisabled: boolean = true;
+  sepaSuccessDisabled: boolean = true;
+  sepaReturnDisabled: boolean = true;
+  sepaDeclineDisabled: boolean = true;
+  sepaRejectDisabled: boolean = true;
   dataModel : any;
   private websocketSubscription!: Subscription;
 
@@ -40,6 +44,7 @@ export class PaymentDetailComponent implements OnInit{
   ngOnInit() {
 
     this.dataModel = this.paymentData.paymentData;
+    console.log(this.dataModel)
     this.setActionLinks(this.dataModel);
     this.isCardPayment = this.dataModel?.source.type == 'card' ? true : false;
 
@@ -48,16 +53,16 @@ export class PaymentDetailComponent implements OnInit{
       amount: new FormControl(this.dataModel.amount),
       currency:new FormControl(this.dataModel.currency),
       status: new FormControl(this.dataModel.status),
-      customerName : new FormControl(this.dataModel.customer.name),
-      customerEmail: new FormControl(this.dataModel.customer.email),
+      customerName : new FormControl(this.dataModel.customer?.name),
+      customerEmail: new FormControl(this.dataModel.customer?.email),
       reference: new FormControl(this.dataModel.reference),
-      expiryMonth: new FormControl(this.isCardPayment? this.dataModel.source.expiry_month : 'N/A'),
-      expiryYear: new FormControl(this.isCardPayment? this.dataModel.source.expiry_year : 'N/A'),
-      paymentMethod: new FormControl(this.isCardPayment ? this.dataModel.source.scheme : this.dataModel.source.type),
-      last4: new FormControl(this.isCardPayment ? this.dataModel.source.last4 : 'N/A'),
-      bin: new FormControl(this.isCardPayment ? this.dataModel.source.bin : 'N/A'),
-      issuerCountry: new FormControl(this.isCardPayment? this.dataModel.source.issuer_country : 'N/A'),
-      cardType: new FormControl(this.isCardPayment? this.dataModel.source.card_type : 'N/A')
+      expiryMonth: new FormControl(this.isCardPayment? this.dataModel.source?.expiry_month : 'N/A'),
+      expiryYear: new FormControl(this.isCardPayment? this.dataModel.source?.expiry_year : 'N/A'),
+      paymentMethod: new FormControl(this.isCardPayment ? this.dataModel.source?.scheme : this.dataModel.source.type),
+      last4: new FormControl(this.isCardPayment ? this.dataModel.source?.last4 : 'N/A'),
+      bin: new FormControl(this.isCardPayment ? this.dataModel.source?.bin : 'N/A'),
+      issuerCountry: new FormControl(this.isCardPayment? this.dataModel.source?.issuer_country : 'N/A'),
+      cardType: new FormControl(this.isCardPayment? this.dataModel.source?.card_type : 'N/A')
     });
 
     this.websocketSubscription = this.websocketService.getwebhookSubject().pipe(
@@ -83,10 +88,6 @@ export class PaymentDetailComponent implements OnInit{
       )
 
   }
-
-  // ngOnDestroy() {
-  //   this.websocketSubscription.unsubscribe();
-  // }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -154,6 +155,11 @@ export class PaymentDetailComponent implements OnInit{
         this.showSnackbar('Payment status updated: Refund Declined');
         break;
       }
+      case WebhookEvents.Returned : {
+        this.paymentDetails.controls['status'].setValue('Returned');
+        this.showSnackbar('Payment status updated: Refund Declined');
+        break;
+      }
       case WebhookEvents.Voided : {
         this.paymentDetails.controls['status'].setValue('Voided');
         this.showSnackbar('Payment status updated: Voided');
@@ -185,8 +191,14 @@ export class PaymentDetailComponent implements OnInit{
 
  setActionLinks(payment:any){
   this.dataModel._links = payment?._links;
+  if(payment.source?.type == 'sepa'){
+    this.sepaDeclineDisabled = payment?._links?.decline?.href ? false : true;
+    this.sepaSuccessDisabled = payment?._links?.succeed?.href ? false : true;
+    this.sepaReturnDisabled = payment?._links?.return?.href ? false : true;
+    this.sepaRejectDisabled = payment?._links?.reject?.href ? false : true;
+  }
   this.refundDisabled = payment?._links?.refund?.href ? false : true;
-  this.captureDisabled = payment?._links?.capture?.href ? false : true;
+  this.captureDisabled = payment?._links?.capture?.href != null ? false : true;
   this.voidDisabled = payment._links?.void?.href ? false : true;
   this.incrementAuthDisabled = payment?._links?.authorizations?.href ? false : true;
  }

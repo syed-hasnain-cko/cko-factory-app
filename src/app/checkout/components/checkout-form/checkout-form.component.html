@@ -157,6 +157,11 @@
     <app-qpay-source *ngIf="showQpay" [qpay]="checkoutdetails.controls.qpayForm"></app-qpay-source>
   </div>
 </div>
+<div class ="row">
+  <div class="col-10"> 
+    <app-sepa-source *ngIf="showSepa" [sepa]="checkoutdetails.controls.sepaForm"></app-sepa-source>
+  </div>
+</div>
 
 <div class ="row" *ngIf="showPaypal"> 
   <div class="col-2"> 
@@ -203,8 +208,6 @@
 </div>
 
   </form>    
-
-
 
     <div class ="row">
         <div class="col-10"> 
