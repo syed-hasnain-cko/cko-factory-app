@@ -42,6 +42,7 @@ export class PaymentsListComponent implements OnInit{
   ngOnInit(){
     
     this.recordedOrders = JSON.parse(localStorage.getItem('payments') || '[]');
+    this.recordedOrders.reverse();
     this.loadPayments(this.recordedOrders);
      
   }
@@ -65,8 +66,8 @@ export class PaymentsListComponent implements OnInit{
           this.orders.sort((a: { requested_on: string | Date; }, b: { requested_on: string | Date; }) => {
             let timestampA = new Date(a.requested_on);
             let timestampB = new Date(b.requested_on);
-            if (timestampA < timestampB) return -1;
-            if (timestampA > timestampB) return 1;
+            if (timestampA > timestampB) return -1;
+            if (timestampA < timestampB) return 1;
             return 0;
           });
           
